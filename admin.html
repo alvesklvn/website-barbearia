@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Barbeiro - Barbearia Vip</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" style="color: #d4af37;" href="admin.html">PAINEL DO BARBEIRO</a>
+        <div class="d-flex">
+            <span class="navbar-text me-3" id="adminName">Olá, Admin</span>
+            <button class="btn btn-outline-light btn-sm" onclick="logout()">Sair</button>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <!-- Relatório Resumido -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="dashboard-card bg-primary text-white">
+                <h6>Total de Agendamentos (Mês Atual)</h6>
+                <h2 id="totalAppointments" class="fw-bold">0</h2>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="dashboard-card text-white" style="background-color: #d4af37;">
+                <h6>Faturamento (Mês Atual)</h6>
+                <h2 id="totalRevenue" class="fw-bold">R$ 0,00</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Notificações (Agendamentos Recentes) -->
+        <div class="col-md-4">
+            <div class="dashboard-card">
+                <h5 class="mb-3 text-warning fw-bold">🔔 Novos Agendamentos</h5>
+                <div id="notificationsList" class="list-group list-group-flush">
+                    <p class="text-muted small">Carregando...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Todos os Agendamentos -->
+        <div class="col-md-8">
+            <div class="dashboard-card">
+                <h5 class="mb-3 fw-bold">Todos os Agendamentos</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Serviço</th>
+                                <th>Data/Hora</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allAppointmentsList">
+                            <tr><td colspan="5" class="text-center text-muted">Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const auth = await checkAuth();
+        if (!auth.logged_in || auth.user.role !== 'admin') {
+            window.location.href = 'login.html';
+            return;
+        }
+        document.getElementById('adminName').innerText = `Olá, ${auth.user.name}`;
+
+        loadDashboardData();
+    });
+
+    async function loadDashboardData() {
+        try {
+            // Stats
+            const statsRes = await fetch(`${API_BASE}/admin.php?action=monthly_stats`);
+            const statsData = await statsRes.json();
+            if (statsData.stats) {
+                document.getElementById('totalAppointments').innerText = statsData.stats.total_appointments;
+                document.getElementById('totalRevenue').innerText = `R$ ${statsData.stats.total_revenue.toFixed(2).replace('.', ',')}`;
+            }
+
+            // Notifications
+            const notifRes = await fetch(`${API_BASE}/admin.php?action=notifications`);
+            const notifData = await notifRes.json();
+            const notifList = document.getElementById('notificationsList');
+            if (notifData.notifications && notifData.notifications.length > 0) {
+                notifList.innerHTML = '';
+                notifData.notifications.forEach(n => {
+                    const dateObj = new Date(n.appointment_date + 'T' + n.appointment_time);
+                    const dateStr = dateObj.toLocaleDateString('pt-BR');
+                    const timeStr = n.appointment_time.substring(0,5);
+                    
+                    notifList.innerHTML += `
+                        <div class="list-group-item px-0">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1 fw-bold">${n.client_name}</h6>
+                                <small class="text-muted">Novo</small>
+                            </div>
+                            <p class="mb-1 small">${n.service_name}</p>
+                            <small class="text-muted">Para: ${dateStr} às ${timeStr}</small>
+                        </div>
+                    `;
+                });
+            } else {
+                notifList.innerHTML = '<p class="text-muted small">Nenhum novo agendamento.</p>';
+            }
+
+            // All Appointments
+            const allRes = await fetch(`${API_BASE}/admin.php?action=all_appointments`);
+            const allData = await allRes.json();
+            const allList = document.getElementById('allAppointmentsList');
+            if (allData.appointments && allData.appointments.length > 0) {
+                allList.innerHTML = '';
+                allData.appointments.forEach(a => {
+                    const dateObj = new Date(a.appointment_date + 'T' + a.appointment_time);
+                    const dateStr = dateObj.toLocaleDateString('pt-BR');
+                    const timeStr = a.appointment_time.substring(0,5);
+
+                    let badgeClass = 'bg-success';
+                    if (a.status === 'pendente') badgeClass = 'bg-warning text-dark';
+                    if (a.status === 'cancelado') badgeClass = 'bg-danger';
+
+                    allList.innerHTML += `
+                        <tr>
+                            <td class="fw-bold">${a.client_name}</td>
+                            <td>${a.service_name}</td>
+                            <td>${dateStr} às ${timeStr}</td>
+                            <td>R$ ${a.price}</td>
+                            <td><span class="badge ${badgeClass}">${a.status}</span></td>
+                        </tr>
+                    `;
+                });
+            } else {
+                allList.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Nenhum agendamento encontrado.</td></tr>';
+            }
+        } catch (e) {
+            console.error('Erro ao carregar dashboard', e);
+        }
+    }
+</script>
+</body>
+</html>
