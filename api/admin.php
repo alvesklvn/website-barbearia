@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if ($action === 'notifications') {
         // Pega os 5 agendamentos mais recentes (independente da data do agendamento)
         $stmt = $pdo->query('
-            SELECT a.id, u.name as client_name, s.name as service_name, a.appointment_date, a.appointment_time, a.created_at
+            SELECT a.id, u.name as client_name, u.phone as client_phone, s.name as service_name, a.appointment_date, a.appointment_time, a.created_at
             FROM appointments a
             JOIN users u ON a.user_id = u.id
             JOIN services s ON a.service_id = s.id
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // AÇÃO: Lista todos os agendamentos cadastrados (Histórico Global)
     elseif ($action === 'all_appointments') {
         $stmt = $pdo->query('
-            SELECT a.id, u.name as client_name, s.name as service_name, s.price, a.appointment_date, a.appointment_time, a.status 
+            SELECT a.id, u.name as client_name, u.phone as client_phone, s.name as service_name, s.price, a.appointment_date, a.appointment_time, a.status 
             FROM appointments a 
             JOIN users u ON a.user_id = u.id
             JOIN services s ON a.service_id = s.id 

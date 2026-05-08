@@ -57,6 +57,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Cliente</th>
+                                <th>Telefone</th>
                                 <th>Serviço</th>
                                 <th>Data/Hora</th>
                                 <th>Valor</th>
@@ -64,7 +65,7 @@
                             </tr>
                         </thead>
                         <tbody id="allAppointmentsList">
-                            <tr><td colspan="5" class="text-center text-muted">Carregando...</td></tr>
+                            <tr><td colspan="6" class="text-center text-muted">Carregando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -146,6 +147,7 @@
                     allList.innerHTML += `
                         <tr>
                             <td class="fw-bold">${a.client_name}</td>
+                            <td>${a.client_phone}</td>
                             <td>${a.service_name}</td>
                             <td>${dateStr} às ${timeStr}</td>
                             <td>R$ ${a.price}</td>
@@ -154,7 +156,7 @@
                     `;
                 });
             } else {
-                allList.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Nenhum agendamento encontrado.</td></tr>';
+                allList.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhum agendamento encontrado.</td></tr>';
             }
         } catch (e) {
             console.error('Erro ao carregar dashboard', e);

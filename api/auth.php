@@ -1,4 +1,5 @@
 <?php
+
 /**
  * API de Autenticação - Gerencia login, registro e sessões.
  */
@@ -8,15 +9,20 @@ require_once '../config/database.php';
 $action = $_GET['action'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
+
     // AÇÃO: Cadastro de novo usuário
     if ($action === 'register') {
         $name = $_POST['name'] ?? '';
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
+        $phone = $_POST['phone'] ?? '';
 
+        // Validação do telefone
+        if (empty($phone)) {
+            sendJson(['error' => 'Telefone é obrigatório'], 400);
+        }
         // Validação simples de campos vazios
-        if (empty($name) || empty($email) || empty($password)) {
+        if (empty($name) || empty($email) || empty($password) || empty($phone)) {
             sendJson(['error' => 'Todos os campos são obrigatórios'], 400);
         }
 
@@ -27,19 +33,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             sendJson(['error' => 'Email já cadastrado'], 400);
         }
 
+        // Verifica se o telefone já existe no banco
+        $stmt = $pdo->prepare('SELECT id FROM users WHERE phone = ?');
+        $stmt->execute([$phone]);
+        if ($stmt->fetch()) {
+            sendJson(['error' => 'Telefone já cadastrado'], 400);
+        }
+
         // Criptografa a senha antes de salvar
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-        
+
         // Insere o novo usuário (tipo padrão: cliente)
-        $stmt = $pdo->prepare('INSERT INTO users (name, email, password) VALUES (?, ?, ?)');
-        
-        if ($stmt->execute([$name, $email, $hashedPassword])) {
+        $stmt = $pdo->prepare('INSERT INTO users (name, email, password, phone) VALUES (?, ?, ?, ?)');
+
+        if ($stmt->execute([$name, $email, $hashedPassword, $phone])) {
             sendJson(['success' => true, 'message' => 'Cadastro realizado com sucesso']);
         } else {
             sendJson(['error' => 'Erro ao cadastrar'], 500);
         }
-        
-    } 
+    }
     // AÇÃO: Login de usuário existente
     elseif ($action === 'login') {
         $email = $_POST['email'] ?? '';
@@ -64,15 +76,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             sendJson(['error' => 'Email ou senha inválidos'], 401);
         }
-    } 
+    }
     // AÇÃO: Logout (encerra sessão)
     elseif ($action === 'logout') {
         session_destroy();
         sendJson(['success' => true]);
     }
-} 
-elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
     // AÇÃO: Retorna dados do usuário logado no momento
     if ($action === 'me') {
         if (isLoggedIn()) {
