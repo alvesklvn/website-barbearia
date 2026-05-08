@@ -1,6 +1,10 @@
 <?php
+/**
+ * API Administrativa - Exclusiva para o barbeiro gerenciar o negócio.
+ */
 require_once '../config/database.php';
 
+// Proteção: Apenas administradores podem acessar estes endpoints
 if (!isAdmin()) {
     sendJson(['error' => 'Acesso negado'], 403);
 }
@@ -8,8 +12,10 @@ if (!isAdmin()) {
 $action = $_GET['action'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    
+    // AÇÃO: Busca notificações de agendamentos recentes
     if ($action === 'notifications') {
-        // Pega os 5 agendamentos mais recentes (criados recentemente)
+        // Pega os 5 agendamentos mais recentes (independente da data do agendamento)
         $stmt = $pdo->query('
             SELECT a.id, u.name as client_name, s.name as service_name, a.appointment_date, a.appointment_time, a.created_at
             FROM appointments a
@@ -19,8 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             LIMIT 5
         ');
         sendJson(['notifications' => $stmt->fetchAll()]);
-    } elseif ($action === 'monthly_stats') {
-        // Estatísticas do mês atual
+    } 
+    // AÇÃO: Calcula estatísticas financeiras do mês atual
+    elseif ($action === 'monthly_stats') {
         $month = date('m');
         $year = date('Y');
 
@@ -37,7 +44,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             'total_appointments' => (int) $stats['total_appointments'],
             'total_revenue' => (float) $stats['total_revenue']
         ]]);
-    } elseif ($action === 'all_appointments') {
+    } 
+    // AÇÃO: Lista todos os agendamentos cadastrados (Histórico Global)
+    elseif ($action === 'all_appointments') {
         $stmt = $pdo->query('
             SELECT a.id, u.name as client_name, s.name as service_name, s.price, a.appointment_date, a.appointment_time, a.status 
             FROM appointments a 

@@ -75,7 +75,9 @@
 
 <script src="assets/js/app.js"></script>
 <script>
+    // Executa ao carregar a página
     document.addEventListener('DOMContentLoaded', async () => {
+        // Proteção de rota: Verifica se o usuário está logado E se é admin
         const auth = await checkAuth();
         if (!auth.logged_in || auth.user.role !== 'admin') {
             window.location.href = 'login.html';
@@ -83,12 +85,16 @@
         }
         document.getElementById('adminName').innerText = `Olá, ${auth.user.name}`;
 
+        // Carrega os dados do painel
         loadDashboardData();
     });
 
+    /**
+     * Busca e renderiza todos os dados do painel administrativo.
+     */
     async function loadDashboardData() {
         try {
-            // Stats
+            // 1. Busca Estatísticas (Total de agendamentos e faturamento)
             const statsRes = await fetch(`${API_BASE}/admin.php?action=monthly_stats`);
             const statsData = await statsRes.json();
             if (statsData.stats) {
@@ -96,7 +102,7 @@
                 document.getElementById('totalRevenue').innerText = `R$ ${statsData.stats.total_revenue.toFixed(2).replace('.', ',')}`;
             }
 
-            // Notifications
+            // 2. Busca Notificações (Últimos 5 agendamentos realizados)
             const notifRes = await fetch(`${API_BASE}/admin.php?action=notifications`);
             const notifData = await notifRes.json();
             const notifList = document.getElementById('notificationsList');
@@ -122,7 +128,7 @@
                 notifList.innerHTML = '<p class="text-muted small">Nenhum novo agendamento.</p>';
             }
 
-            // All Appointments
+            // 3. Busca a lista completa de todos os agendamentos (Histórico)
             const allRes = await fetch(`${API_BASE}/admin.php?action=all_appointments`);
             const allData = await allRes.json();
             const allList = document.getElementById('allAppointmentsList');

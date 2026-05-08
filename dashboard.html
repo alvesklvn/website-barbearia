@@ -66,7 +66,9 @@
 
 <script src="assets/js/app.js"></script>
 <script>
+    // Executa ao carregar a página
     document.addEventListener('DOMContentLoaded', async () => {
+        // Proteção de rota: Verifica se o usuário está logado
         const auth = await checkAuth();
         if (!auth.logged_in) {
             window.location.href = 'login.html';
@@ -74,14 +76,18 @@
         }
         document.getElementById('userName').innerText = `Olá, ${auth.user.name}`;
 
-        // Definir data mínima como hoje
+        // Regra de UI: Impede agendamentos para datas passadas
         const dateInput = document.getElementById('dateInput');
         dateInput.min = new Date().toISOString().split('T')[0];
 
+        // Inicializa dados da página
         loadServices();
         loadMyAppointments();
     });
 
+    /**
+     * Carrega a lista de serviços disponíveis no dropdown.
+     */
     async function loadServices() {
         const res = await fetch(`${API_BASE}/appointments.php?action=services`);
         const data = await res.json();
@@ -94,20 +100,24 @@
         }
     }
 
+    /**
+     * Escuta mudanças na data para buscar horários disponíveis dinamicamente.
+     */
     document.getElementById('dateInput').addEventListener('change', async (e) => {
         const date = e.target.value;
         const res = await fetch(`${API_BASE}/appointments.php?action=available_times&date=${date}`);
         const data = await res.json();
         
         const container = document.getElementById('timesContainer');
-        container.innerHTML = '';
-        document.getElementById('timeInput').value = '';
+        container.innerHTML = ''; // Limpa horários anteriores
+        document.getElementById('timeInput').value = ''; // Reseta seleção
 
         if (data.error) {
             container.innerHTML = `<p class="text-danger small">${data.error}</p>`;
             return;
         }
 
+        // Renderiza os horários como pequenos botões (badges)
         if (data.times && data.times.length > 0) {
             data.times.forEach(t => {
                 const badge = document.createElement('span');
@@ -121,12 +131,18 @@
         }
     });
 
+    /**
+     * Gerencia a seleção visual do horário.
+     */
     function selectTime(element, time) {
         document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
         element.classList.add('selected');
         document.getElementById('timeInput').value = time;
     }
 
+    /**
+     * Envia o formulário de agendamento.
+     */
     document.getElementById('bookForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const time = document.getElementById('timeInput').value;
@@ -146,12 +162,15 @@
             alert(data.message);
             document.getElementById('bookForm').reset();
             document.getElementById('timesContainer').innerHTML = '<p class="text-muted small">Selecione uma data para ver os horários disponíveis.</p>';
-            loadMyAppointments();
+            loadMyAppointments(); // Atualiza a lista lateral
         } else {
             alert(data.error);
         }
     });
 
+    /**
+     * Carrega o histórico de agendamentos do cliente.
+     */
     async function loadMyAppointments() {
         const res = await fetch(`${API_BASE}/appointments.php?action=my_appointments`);
         const data = await res.json();
@@ -160,11 +179,12 @@
         if (data.appointments && data.appointments.length > 0) {
             list.innerHTML = '';
             data.appointments.forEach(a => {
-                // Formatar data
+                // Formatação de data para o padrão brasileiro
                 const dateObj = new Date(a.appointment_date + 'T' + a.appointment_time);
                 const dateStr = dateObj.toLocaleDateString('pt-BR');
                 const timeStr = a.appointment_time.substring(0,5);
 
+                // Define cor do badge baseado no status
                 let badgeClass = 'bg-success';
                 if (a.status === 'pendente') badgeClass = 'bg-warning text-dark';
                 if (a.status === 'cancelado') badgeClass = 'bg-danger';
