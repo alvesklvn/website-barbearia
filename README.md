@@ -4,6 +4,10 @@
 ![MySQL](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+
 
 Um sistema completo de gestão de agendamentos para barbearias, desenvolvido com **PHP Puro** e **MySQL**. O projeto oferece uma interface elegante, responsiva e funcionalidades específicas tanto para clientes quanto para o proprietário (barbeiro).
 
@@ -56,7 +60,40 @@ http://localhost/barberia
 
 ---
 
-## 🔑 Credenciais de Teste (Admin)
+## � Mensagem automática via WhatsApp
+O sistema já inclui um bot Python que envia mensagens automáticas para clientes com agendamentos pendentes.
+
+### Como usar
+1. Entre na pasta do bot:
+```bash
+cd bot
+```
+2. Ative o ambiente virtual (Linux):
+```bash
+source venv/bin/activate
+```
+3. Instale as dependências necessárias:
+```bash
+pip install requests python-dotenv mysql-connector-python
+```
+4. Verifique o arquivo `.env` e ajuste as variáveis, se necessário:
+```text
+AUTHENTICATION_API_KEY=
+DB_HOST=
+DB_USER=
+DB_PASS=
+DB_NAME=
+```
+5. Execute o bot:
+```bash
+python app.py
+```
+
+O bot consulta a tabela `appointments` e envia mensagens para os registros com `notification_status = 'pendente'`. Após o envio, ele atualiza o status para `enviado`.
+
+---
+
+## �🔑 Credenciais de Teste (Admin)
 
 Para acessar o painel administrativo e visualizar o faturamento, utilize os dados abaixo:
 - **E-mail:** `admin@barbearia.com`
@@ -67,13 +104,28 @@ Para acessar o painel administrativo e visualizar o faturamento, utilize os dado
 ## 📂 Estrutura de Pastas
 
 ```text
-├── api/                # Endpoints PHP para comunicação com o frontend
-├── assets/             # Arquivos estáticos (CSS, JS, Imagens)
-├── config/             # Configuração de conexão com o banco de dados
-├── admin.html          # Painel do Barbeiro
-├── dashboard.html      # Painel do Cliente
-├── database.sql        # Script de criação do banco de dados
-└── index.html          # Landing Page principal
+├── .gitignore              # Define arquivos/pastas que o Git deve ignorar
+├── bot/                    # Bot Python para envio automático de mensagens via WhatsApp
+│   ├── app.py              # Script principal que consulta agendamentos e envia notificações
+│   ├── .env                # Variáveis de ambiente do bot (API key e dados do banco)
+│   └── venv/               # Ambiente virtual Python usado pelo bot
+├── database.sql            # Script SQL para criar o banco, tabelas e dados iniciais
+├── docker-compose.yml      # Configuração de orquestração de containers (opcional)
+├── README.md               # Documentação do projeto
+└── web/                    # Aplicação web PHP/HTML/JS principal
+    ├── admin.html          # Painel administrativo para o barbeiro
+    ├── dashboard.html      # Área do cliente com histórico de agendamentos
+    ├── index.html          # Página inicial / landing page
+    ├── login.html          # Tela de login de clientes e admin
+    ├── register.html       # Formulário de cadastro de novos clientes
+    ├── api/                # Endpoints PHP que atendem o frontend
+    │   ├── auth.php        # Autenticação, registro e sessão de usuários
+    │   └── appointments.php# Busca de horários, criação de agendamentos e histórico
+    ├── assets/             # Arquivos estáticos do frontend
+    │   ├── css/style.css   # Estilos customizados da aplicação
+    │   └── js/app.js       # Lógica JavaScript compartilhada no frontend
+    └── config/             # Configuração do banco de dados para a web
+        └── database.php    # Conexão MySQL usada pela aplicação web
 ```
 
 ---
@@ -82,4 +134,4 @@ Para acessar o painel administrativo e visualizar o faturamento, utilize os dado
 Este projeto foi desenvolvido para fins de demonstração e estudo. Sinta-se à vontade para clonar e adaptar para suas necessidades!
 
 ---
-*Desenvolvido com ❤️ para a Barbearia VIP.*
+*Desenvolvido com ❤️*
