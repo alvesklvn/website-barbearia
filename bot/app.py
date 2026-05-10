@@ -5,6 +5,7 @@ import time
 import mysql.connector
 # pyrefly: ignore [missing-import]
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -12,8 +13,24 @@ def enviar_whatsapp(appt):
     url = "http://127.0.0.1:8080/message/sendText/barber_notifier"
     
     # Tratamento de Data e Hora para o formato brasileiro
+    dia_semana = appt['appointment_date'].weekday()
+    match dia_semana:
+        case 1:
+            dia_semana = ', Terça-feira'
+        case 2:
+            dia_semana = ', Quarta-feira'
+        case 3:
+            dia_semana = ', Quinta-feira'
+        case 4:
+            dia_semana = ', Sexta-feira'
+        case 5:
+            dia_semana = ', Sábado'
+        case _:
+            dia_semana = ''
+        
     data_formatada = appt['appointment_date'].strftime('%d/%m/%Y')
     horario_formatado = str(appt['appointment_time'])[:5]
+    n = int(horario_formatado[:2])
 
     msg = f"""✂️ *BARBEARIA* — Confirmação de Agendamento
 
@@ -21,7 +38,7 @@ Olá, *{appt['user_name']}*! 👋
 
 Seu agendamento foi confirmado com sucesso:
 
-📅 *Data:* {data_formatada}
+📅 *Data:* {data_formatada}{dia_semana}
 ⏰ *Horário:* {horario_formatado}
 💈 *Serviço:* {appt['service_name']}
 💰 *Valor:* R$ {appt['price']}
