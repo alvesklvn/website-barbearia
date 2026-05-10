@@ -3,8 +3,7 @@
  */
 
 // Base da URL para chamadas de API
-const API_BASE = '/barberia/api';
-
+const API_BASE = '/barberia/web/api'; //barberia/api
 /**
  * Verifica o status de autenticação do usuário.
  * Faz uma chamada para o backend para saber se há uma sessão ativa.

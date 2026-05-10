@@ -17,10 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $password = $_POST['password'] ?? '';
         $phone = $_POST['phone'] ?? '';
 
-        // Validação do telefone
-        if (empty($phone)) {
-            sendJson(['error' => 'Telefone é obrigatório'], 400);
-        }
         // Validação simples de campos vazios
         if (empty($name) || empty($email) || empty($password) || empty($phone)) {
             sendJson(['error' => 'Todos os campos são obrigatórios'], 400);
