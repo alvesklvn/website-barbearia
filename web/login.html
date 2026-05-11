@@ -51,7 +51,8 @@
             try {
                 const res = await fetch(`${API_BASE}/auth.php?action=login`, {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    credentials: 'include'
                 });
                 const data = await res.json();
 

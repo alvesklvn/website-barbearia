@@ -13,6 +13,10 @@ body {
     text-align: center;
 }
 
+#principalbranding {
+    color: white;
+}
+
 .auth-card {
     max-width: 400px;
     margin: 50px auto;
@@ -23,11 +27,28 @@ body {
 }
 
 .dashboard-card {
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     background: white;
-    padding: 20px;
+    padding: 24px;
     margin-bottom: 20px;
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.dashboard-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+}
+
+.dashboard-card.bg-primary {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border: none;
+}
+
+.dashboard-card[style*="background-color: #d4af37"] {
+    background: linear-gradient(135deg, #d4af37 0%, #b8921c 100%) !important;
+    border: none;
 }
 
 .btn-primary {
@@ -57,4 +78,176 @@ body {
     background-color: #d4af37;
     color: black;
     border-color: #d4af37;
+}
+
+/* Tabelas */
+.table {
+    border-collapse: collapse;
+}
+
+.table thead {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.table tbody tr {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.table td {
+    vertical-align: middle;
+    padding: 12px;
+}
+
+.table th {
+    padding: 12px;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+}
+
+/* Badges */
+.badge {
+    padding: 6px 12px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+
+.badge.bg-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+}
+
+.badge.bg-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%) !important;
+}
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%) !important;
+}
+.minimal-btn {
+    font-size: 1.2rem;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: none !important;
+    border: none !important;
+    padding: 0.25rem 0.5rem !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+}
+
+.minimal-btn:hover {
+    opacity: 1 !important;
+    transform: scale(1.2);
+    color: #d4af37;
+}
+
+/* Lista de notificações */
+.list-group-item {
+    border: 1px solid #e9ecef;
+    padding: 12px 0;
+    transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+    border-color: #d4af37;
+}
+
+.list-group-item:first-child {
+    border-top: none;
+}
+
+.list-group-item h6 {
+    color: #212529;
+    margin-bottom: 4px;
+}
+
+.list-group-item small {
+    color: #6c757d;
+}
+
+/* Modal customizado */
+.modal-content {
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-title {
+    font-weight: 600;
+    color: #212529;
+}
+
+/* Inputs customizados */
+.form-control, .form-select {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 12px;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #d4af37;
+    box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25);
+    color: #212529;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+}
+
+/* Navbar */
+.navbar-dark {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: #212529;
+}
+
+/* Scrollbar customizada */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d4af37;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #b8921c;
 }

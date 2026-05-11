@@ -4,6 +4,15 @@
  */
 require_once '../config/database.php';
 
+// CORS Headers
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
 // Proteção: Apenas administradores podem acessar estes endpoints
 if (!isAdmin()) {
     sendJson(['error' => 'Acesso negado'], 403);
@@ -55,6 +64,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             ORDER BY a.appointment_date DESC, a.appointment_time DESC
         ');
         sendJson(['appointments' => $stmt->fetchAll()]);
+    }
+    // AÇÃO: Limpa todos os dados (apaga agendamentos do banco)
+    elseif ($action === 'clear_data') {
+        $stmt = $pdo->prepare('DELETE FROM appointments');
+        if ($stmt->execute()) {
+            sendJson(['success' => true, 'message' => 'Dados limpados com sucesso']);
+        } else {
+            sendJson(['error' => 'Erro ao limpar dados'], 500);
+        }
+    }
+}
+elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // AÇÃO: Atualiza agendamento (data, hora) e marca para renotificação
+    if ($action === 'update_appointment') {
+        $appointment_id = $_POST['appointment_id'] ?? '';
+        $new_date = $_POST['new_date'] ?? '';
+        $new_time = $_POST['new_time'] ?? '';
+
+        if (empty($appointment_id) || empty($new_date) || empty($new_time)) {
+            sendJson(['error' => 'ID, data e hora são obrigatórios'], 400);
+        }
+
+        // Verificar se o novo horário já está ocupado
+        $stmt = $pdo->prepare('SELECT id FROM appointments WHERE appointment_date = ? AND appointment_time = ? AND id != ? AND status != "cancelado"');
+        $stmt->execute([$new_date, $new_time, $appointment_id]);
+        if ($stmt->fetch()) {
+            sendJson(['error' => 'Este horário já está ocupado'], 400);
+        }
+
+        // Atualizar o agendamento e mudar status para 'pendente' para renotificação
+        $stmt = $pdo->prepare('UPDATE appointments SET appointment_date = ?, appointment_time = ?, status = "pendente", notification_status = "pendente" WHERE id = ?');
+        if ($stmt->execute([$new_date, $new_time, $appointment_id])) {
+            sendJson(['success' => true, 'message' => 'Agendamento atualizado com sucesso']);
+        } else {
+            sendJson(['error' => 'Erro ao atualizar agendamento'], 500);
+        }
+    }
+    // AÇÃO: Deleta um agendamento
+    elseif ($action === 'delete_appointment') {
+        $appointment_id = $_POST['appointment_id'] ?? '';
+
+        if (empty($appointment_id)) {
+            sendJson(['error' => 'ID do agendamento é obrigatório'], 400);
+        }
+
+        $stmt = $pdo->prepare('DELETE FROM appointments WHERE id = ?');
+        if ($stmt->execute([$appointment_id])) {
+            sendJson(['success' => true, 'message' => 'Agendamento deletado com sucesso']);
+        } else {
+            sendJson(['error' => 'Erro ao deletar agendamento'], 500);
+        }
     }
 }
 

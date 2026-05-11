@@ -11,7 +11,9 @@ const API_BASE = '/barberia/web/api'; //barberia/api
  */
 async function checkAuth() {
     try {
-        const res = await fetch(`${API_BASE}/auth.php?action=me`);
+        const res = await fetch(`${API_BASE}/auth.php?action=me`, {
+            credentials: 'include'
+        });
         const data = await res.json();
         return data;
     } catch (e) {
@@ -23,7 +25,7 @@ async function checkAuth() {
  * Encerra a sessão do usuário e redireciona para a home.
  */
 async function logout() {
-    await fetch(`${API_BASE}/auth.php?action=logout`, { method: 'POST' });
+    await fetch(`${API_BASE}/auth.php?action=logout`, { method: 'POST', credentials: 'include' });
     window.location.href = 'index.html';
 }
 
