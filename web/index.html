@@ -77,11 +77,11 @@
             color: #1a1a1a;
         }
 
-        .form-group {
+        .mb-3 {
             margin-bottom: 25px;
         }
 
-        .form-group input {
+        .mb-3 input {
             width: 100%;
             padding: 18px 30px;
             border: 1px solid rgba(0, 0, 0, 0.03);
@@ -92,21 +92,21 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .form-group input:hover {
+        .mb-3 input:hover {
             transform: scale(1.05);
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
             border-color: rgba(0, 0, 0, 0.1);
             z-index: 5;
         }
 
-        .form-group input:focus {
+        .mb-3 input:focus {
             outline: none;
             border-color: #000;
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
             transform: scale(1.05);
         }
 
-        .form-group input::placeholder {
+        .mb-3 input::placeholder {
             color: #888;
             font-weight: 500;
             font-size: 0.9rem;
@@ -315,18 +315,18 @@
     <div class="form-section" id="form-section">
         <div class="register-card">
             <h2 style="font-size: 1.8rem; margin-bottom: 35px; text-align: left;">Cadastre-se</h2>
-            <form id="register-form">
-                <div class="form-group">
-                    <input type="text" id="nome" name="nome" placeholder="NOME" required>
+            <form id="registerForm">
+                <div class="mb-3">
+                    <input type="text" id="nome" name="name" placeholder="NOME COMPLETO" required>
                 </div>
-                <div class="form-group">
-                    <input type="email" id="email" name="email" placeholder="EMAIL" required>
+                <div class="mb-3">
+                    <input type="email" id="email" name="email" placeholder="SEUEMAIL@GMAIL.COM" required>
                 </div>
-                <div class="form-group">
-                    <input type="tel" id="telefone" name="telefone" placeholder="TELEFONE" required>
+                <div class="mb-3">
+                    <input type="tel" id="phone" name="phone" placeholder="(00) 00000-0000" maxlength="15" required>
                 </div>
-                <div class="form-group">
-                    <input type="password" id="senha" name="senha" placeholder="SENHA" required>
+                <div class="mb-3">
+                    <input type="password" id="senha" name="password" placeholder="SENHA" required>
                 </div>
                 <button type="submit" class="btn-submit w-100" style="border-radius: 50px;">CADASTRAR</button>
             </form>
@@ -349,6 +349,35 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/app.js"></script>
+
+<script>
+                // Função simples para aplicar a máscara de telefone brasileiro
+                const telInput = document.getElementById('phone');
+
+                telInput.addEventListener('input', (e) => {
+                    let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não é dígito
+
+                    if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
+
+                    // Aplica a formatação dinamicamente
+                    if (value.length > 10) {
+                        // Formato (99) 99999-9999
+                        value = value.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+                    } else if (value.length > 6) {
+                        // Formato (99) 9999-9999
+                        value = value.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+                    } else if (value.length > 2) {
+                        // Formato (99) 9...
+                        value = value.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
+                    } else if (value.length > 0) {
+                        // Formato (99...
+                        value = value.replace(/^(\d*)/, "($1");
+                    }
+
+                    e.target.value = value;
+                });
+            </script>
+
 <script>
     function initNavPill() {
         const pill = document.getElementById('nav-pill');
@@ -426,40 +455,27 @@
     });
 
     // Submissão do formulário de cadastro
-    document.getElementById('register-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const formData = {
-            name: document.getElementById('nome').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('telefone').value,
-            password: document.getElementById('senha').value
-        };
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
 
-        try {
-            const response = await fetch('api/auth.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    action: 'register',
-                    ...formData
-                })
-            });
+            try {
+                const res = await fetch(`${API_BASE}/auth.php?action=register`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
 
-            const data = await response.json();
-            if (data.success) {
-                alert('Cadastro realizado com sucesso! Faça login para continuar.');
-                window.location.href = 'login.html';
-            } else {
-                alert('Erro ao cadastrar: ' + (data.message || 'Tente novamente'));
+                if (res.ok && data.success) {
+                    alert('Cadastro realizado com sucesso! Faça login.');
+                    window.location.href = 'login.html';
+                } else {
+                    alert(data.error || 'Erro no cadastro');
+                }
+            } catch (err) {
+                alert('Erro de conexão');
             }
-        } catch (error) {
-            console.error('Erro:', error);
-            alert('Erro ao processar o cadastro');
-        }
-    });
+        });
 </script>
 </body>
 </html>

@@ -10,34 +10,187 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
         body {
-            background-color: #212529;
+            background-image: url('assets/imagens/barbearia_fundo.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: transparent !important;
+            padding: 2rem 0;
+            box-shadow: none !important;
+        }
+
+        .navbar-brand {
+            display: none;
+        }
+
+        .container-main {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background-color: transparent;
+        }
+
+        /* Camada branca diagonal */
+        .diagonal-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            clip-path: polygon(0 0, 35% 0, 65% 100%, 0 100%);
+            z-index: 1;
+        }
+
+        .form-section {
+            flex: 1;
+            padding: 120px 40px 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding-left: 8%;
+            position: relative;
+            z-index: 2;
+            background: transparent;
+        }
+
+        .auth-card {
+            background-color: transparent;
+            padding: 20px 0;
+            border-radius: 40px;
+            box-shadow: none;
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .form-section h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            color: #1a1a1a;
+        }
+
+        .mb-3, .mb-4 {
+            margin-bottom: 25px;
+        }
+
+        .mb-3 input, .mb-4 input {
+            width: 100%;
+            padding: 18px 30px;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            border-radius: 50px;
+            background-color: #fff;
+            font-size: 1rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mb-3 input:hover, .mb-4 input:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+            border-color: rgba(0, 0, 0, 0.1);
+            z-index: 5;
+        }
+
+        .mb-3 input:focus, .mb-4 input:focus {
+            outline: none;
+            border-color: #000;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+            transform: scale(1.05);
+        }
+
+        .mb-3 input::placeholder, .mb-4 input::placeholder {
+            color: #888;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .btn-submit {
+            background-color: #1a1a1a;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            background-color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .form-label {
+            color: #1a1a1a;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .text-center a {
+            color: #d4af37;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .text-center a:hover {
+            color: #c5a017;
+        }
+
+        .text-center-title {
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .text-center-subtitle {
+            color: #888;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <div class="auth-card">
-            <div class="text-center mb-4">
-                <h3 class="fw-bold" style="color: #d4af37;">BARBEARIA VIP</h3>
-                <p class="text-muted">Faça login para continuar</p>
-            </div>
-
-            <form id="loginForm">
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" placeholder="seuemail@gmail.com" required>
+    <div class="container-main">
+        <div class="diagonal-bg"></div>
+        <div class="form-section">
+            <div class="auth-card">
+                <div class="text-center mb-4">
+                    <h2 style="color: #d4af37; margin-bottom: 10px;">BARBEARIA VIP</h2>
+                    <p class="text-center-subtitle">Faça login para continuar</p>
                 </div>
-                <div class="mb-4">
-                    <label class="form-label">Senha</label>
-                    <input type="password" name="password" class="form-control" placeholder="********" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100 py-2">Entrar</button>
-            </form>
 
-            <div class="text-center mt-3">
-                <p class="mb-0">Não tem uma conta? <a href="register.html" style="color: #d4af37;">Cadastre-se</a></p>
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" placeholder="seuemail@gmail.com" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Senha</label>
+                        <input type="password" name="password" placeholder="********" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Entrar</button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="mb-0" style="color: #1a1a1a;">Não tem uma conta? <a href="index.html">Cadastre-se</a></p>
+                </div>
             </div>
         </div>
     </div>
