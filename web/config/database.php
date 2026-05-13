@@ -3,6 +3,9 @@
  * Configuração de conexão com o banco de dados e funções auxiliares.
  */
 
+// Define timezone para Brasília
+date_default_timezone_set('America/Sao_Paulo');
+
 // Inicia a sessão para controle de autenticação
 session_start();
 

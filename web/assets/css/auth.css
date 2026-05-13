@@ -1,0 +1,148 @@
+/* ==========================================
+   AUTH STYLES - Login e Register
+   ========================================== */
+
+body {
+    background-image: url('../imagens/barbearia_fundo.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+}
+
+.navbar {
+    background-color: transparent !important;
+    padding: 2rem 0;
+    box-shadow: none !important;
+}
+
+.navbar-brand {
+    display: none;
+}
+
+.container-main {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: transparent;
+}
+
+
+.form-section {
+    flex: 1;
+    padding: 120px 40px 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 8%;
+    position: relative;
+    z-index: 2;
+    background: transparent;
+}
+
+.auth-card {
+    background-color: #ffffff !important; /* Força o fundo branco */
+    border-radius: 35px !important;       /* Arredondamento forte */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important; /* Sombra visível */
+    padding: 50px 40px !important;
+    display: block !important;           /* Garante que ele se comporte como uma caixa */
+    width: 100% !important;
+    max-width: 450px !important;
+    margin: 0 auto !important;           /* Centraliza o card */
+}
+
+.form-section h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 40px;
+    color: #1a1a1a;
+}
+
+.mb-3, .mb-4 {
+    margin-bottom: 25px;
+}
+
+.mb-3 input, .mb-4 input {
+    width: 100%;
+    padding: 18px 30px;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    border-radius: 50px;
+    background-color: #fff;
+    font-size: 1rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mb-3 input:hover, .mb-4 input:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.1);
+    z-index: 5;
+}
+
+.mb-3 input:focus, .mb-4 input:focus {
+    outline: none;
+    border-color: #000;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    transform: scale(1.05);
+}
+
+.mb-3 input::placeholder, .mb-4 input::placeholder {
+    color: #888;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.btn-submit {
+    background-color: #1a1a1a;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 100%;
+}
+
+.btn-submit:hover {
+    background-color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.form-label {
+    color: #1a1a1a;
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.text-center a {
+    color: #d4af37;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.text-center a:hover {
+    color: #c5a017;
+}
+
+.text-center-title {
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+
+.text-center-subtitle {
+    color: #888;
+    font-size: 0.9rem;
+}
