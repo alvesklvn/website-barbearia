@@ -3,10 +3,7 @@
    ========================================== */
 
 body {
-    background-image: url('../imagens/barbearia_fundo.png');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-color: #ffffff;
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
 }

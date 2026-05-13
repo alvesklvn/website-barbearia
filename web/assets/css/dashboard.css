@@ -3,9 +3,7 @@
    ========================================== */
 
 body {
-    background-image: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)), url('../../imagens/barbearia_fundo.png');
-    background-size: cover;
-    background-attachment: fixed;
+    background-color: #ffffff;
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
 }
