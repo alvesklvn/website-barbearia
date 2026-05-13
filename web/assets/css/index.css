@@ -3,9 +3,11 @@
    ========================================== */
 
 body {
-    background-color: #ffffff;
+    background: url('../imagens/barbearia_fundo.png') no-repeat center center fixed;
+    background-size: cover;
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .navbar {
@@ -64,14 +66,14 @@ body {
     font-size: 5rem;
     font-weight: 800;
     line-height: 1.1;
-    color: #000;
+    color: #fff;
     margin-bottom: 20px;
     letter-spacing: -2px;
 }
 
 .welcome-subtitle {
     font-size: 1.8rem;
-    color: #888;
+    color: #fff;
     margin-bottom: 40px;
     font-weight: 400;
 }
@@ -84,11 +86,11 @@ body {
 
 .btn-welcome-outline {
     background: transparent;
-    border: 1px solid #1a1a1a;
+    border: 1px solid #fff;
     padding: 12px 45px;
     border-radius: 4px;
     font-size: 1.2rem;
-    color: #1a1a1a;
+    color: #fff;
     text-transform: lowercase;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -100,7 +102,7 @@ body {
 }
 
 .btn-welcome-solid {
-    background: #000;
+    background: #bd9c31e3;
     color: #fff;
     border: none;
     padding: 12px 45px;
@@ -206,7 +208,7 @@ body {
 }
 
 .btn-submit {
-    background-color: #1a1a1a;
+    background-color: #bd9c31e3;
     border: none;
     padding: 12px;
     border-radius: 8px;
@@ -323,7 +325,7 @@ body {
 }
 
 .btn-nav {
-    background-color: #1a1a1a;
+    background-color: #bd9c31e3;
     color: #fff !important;
     padding: 8px 25px !important;
     border-radius: 25px;
@@ -391,5 +393,104 @@ body {
 
     .branded-text {
         font-size: 2.2rem;
+    }
+}
+
+/* ==========================================
+   NEW BLACK SECTION
+   ========================================== */
+.section-black {
+    background-color: #000;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    padding: 100px 40px;
+}
+
+.container-black-content {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    align-items: center;
+    gap: 80px;
+}
+
+.carousel-side {
+    flex: 1;
+    max-width: 500px;
+}
+
+.placeholder-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #333;
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.05);
+}
+
+.text-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: right;
+    align-items: flex-end;
+}
+
+.section-title {
+    font-size: 5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 20px;
+    letter-spacing: -2px;
+}
+
+.section-subtitle {
+    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 40px;
+    font-weight: 400;
+}
+
+.btn-agendar-black {
+    background-color: #bd9c31e3;
+    color: #fff;
+    padding: 12px 45px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 1.2rem;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    width: fit-content;
+    display: inline-block;
+}
+
+.btn-agendar-black:hover {
+    background-color: #d4b44d;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(189, 156, 49, 0.4);
+    color: #fff;
+}
+
+@media (max-width: 992px) {
+    .container-black-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 50px;
+    }
+    
+    .text-side {
+        align-items: center;
+    }
+    
+    .section-title {
+        font-size: 2.5rem;
     }
 }
