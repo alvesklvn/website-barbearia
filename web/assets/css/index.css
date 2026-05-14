@@ -52,7 +52,7 @@ body {
     opacity: 0;
     width: 100%;
     max-width: 450px;
-    margin: 0 auto;
+    margin-left: 0;
     transition: opacity 0.5s ease-in-out;
 }
 
@@ -65,7 +65,7 @@ body {
     opacity: 0;
     width: 100%;
     max-width: 450px;
-    margin: 0 auto;
+    margin-left: 0;
     transition: opacity 0.5s ease-in-out;
 }
 
@@ -417,6 +417,7 @@ body {
     .container-main {
         flex-direction: column;
         margin-top: 70px;
+        min-height: auto;
     }
 
     .form-section {
@@ -424,7 +425,11 @@ body {
     }
 
     .image-section {
-        min-height: 400px;
+        min-height: auto;
+    }
+
+    .section-black {
+        padding: 50px 20px;
     }
 
     .branded-text {
@@ -551,14 +556,28 @@ body {
     .container-black-content {
         flex-direction: column;
         text-align: center;
-        gap: 50px;
+        gap: 40px;
+    }
+    
+    .carousel-side, .text-side, .info-side, .map-side {
+        width: 100%;
+        max-width: none;
+        text-align: center;
+        align-items: center;
     }
     
     .text-side {
+        text-align: center;
         align-items: center;
     }
     
     .section-title {
         font-size: 2.5rem;
+        text-align: center;
+        width: 100%;
+    }
+
+    .placeholder-img {
+        margin: 0 auto;
     }
 }
