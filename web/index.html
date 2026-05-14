@@ -187,7 +187,7 @@
             // Inicializar o efeito da pílula deslizante
             initNavPill();
 
-            if (auth.logged_in) {
+            if (auth.logged_in && auth.user.role !== 'admin') {
                 // Usuário está logado
                 const formSection = document.getElementById('form-section');
                 const heroContent = document.getElementById('hero-content');
@@ -203,6 +203,25 @@
                 <a href="index.html" class="active">INÍCIO</a>
                 <a href="#contato">CONTATO</a>
                 <a href="dashboard.html">AGENDAR</a>
+                <a href="#" onclick="logout(); return false;" class="btn-nav btn-logout">SAIR</a>
+            `;
+                initNavPill();
+            } else if (auth.logged_in && auth.user.role == 'admin') {
+                // Usuário está logado
+                const formSection = document.getElementById('form-section');
+                const heroContent = document.getElementById('hero-content');
+
+                // Ocultar formulário e exibir conteudo ao meio
+                formSection.style.display = 'none';
+                heroContent.style.display = 'flex';
+
+                // Atualizar navbar
+                const navItems = document.getElementById('nav-items');
+                navItems.innerHTML = `
+                <div class="nav-active-pill" id="nav-pill"></div>
+                <a href="index.html" class="active">INÍCIO</a>
+                <a href="#contato">CONTATO</a>
+                <a href="admin.html">PAINEL DO BARBEIRO</a>
                 <a href="#" onclick="logout(); return false;" class="btn-nav btn-logout">SAIR</a>
             `;
                 initNavPill();
