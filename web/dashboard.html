@@ -85,10 +85,11 @@
             // Proteção de rota: Verifica se o usuário está logado
             const auth = await checkAuth();
             if (!auth.logged_in) {
-                window.location.href = 'login.html';
+                window.location.href = 'index.html?showLogin=true';
                 return;
             }
-            document.getElementById('userName').innerText = `Olá, ${auth.user.name}`;
+            const firstName = auth.user.name.split(" ")[0];
+            document.getElementById('userName').innerText = `Olá, ${firstName}`;
 
             // Regra de UI: Impede agendamentos para datas passadas
             const dateInput = document.getElementById('dateInput');

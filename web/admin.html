@@ -133,10 +133,10 @@
         // Proteção de rota: Verifica se o usuário está logado E se é admin
         const auth = await checkAuth();
         if (!auth.logged_in || auth.user.role !== 'admin') {
-            window.location.href = 'login.html';
+            window.location.href = 'index.html?showLogin=true';
             return;
         }
-        document.getElementById('adminName').innerText = `Olá, ${auth.user.name}`;
+        document.getElementById('adminName').innerText = `Olá, Igor`;
 
         // Inicializa o modal
         editModalInstance = new bootstrap.Modal(document.getElementById('editModal'), {});

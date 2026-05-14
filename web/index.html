@@ -251,6 +251,12 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const auth = await checkAuth();
 
+            // Verifica se deve abrir o login automaticamente
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('showLogin') === 'true' && !auth.logged_in) {
+                setTimeout(() => showLogin(), 100);
+            }
+
             // Inicializar o efeito da pílula deslizante
             initNavPill();
 
@@ -309,7 +315,7 @@
 
                 if (res.ok && data.success) {
                     alert('Cadastro realizado com sucesso! Faça login.');
-                    window.location.href = 'login.html';
+                    window.location.href = 'index.html?showLogin=true';
                 } else {
                     alert(data.error || 'Erro no cadastro');
                 }
