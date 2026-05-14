@@ -23,7 +23,7 @@
                 <div class="nav-active-pill" id="nav-pill"></div>
                 <a href="index.html">INÍCIO</a>
                 <a href="#contato">CONTATO</a>
-                <a href="dashboard.html">AGENDAR</a>
+                <a href="admin.html">PAINEL DO BARBEIRO</a>
                 <span class="navbar-text me-3" id="adminName">Olá, Admin</span>
                 <a href="#" class="btn-nav btn-logout" id="btn-entrar" onclick="logout(); return false;">SAIR</a>
             </div>
@@ -137,6 +137,9 @@
             return;
         }
         document.getElementById('adminName').innerText = `Olá, Igor`;
+
+        // Inicializa o navbar
+        initializeNavbar();
 
         // Inicializa o modal
         editModalInstance = new bootstrap.Modal(document.getElementById('editModal'), {});
