@@ -417,7 +417,7 @@ body {
     .container-main {
         flex-direction: column;
         margin-top: 70px;
-        min-height: auto;
+        min-height: 100vh;
     }
 
     .form-section {
