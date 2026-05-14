@@ -285,3 +285,187 @@ h6 {
 ::-webkit-scrollbar-thumb:hover {
     background: #b8921c;
 }
+
+/* ==========================================
+   NAVBAR GLOBAL STYLES
+   ========================================== */
+
+.navbar {
+    background-color: transparent !important;
+    padding: 2rem 0;
+    box-shadow: none !important;
+    z-index: 1000;
+}
+
+.navbar-brand {
+    display: none;
+}
+
+.menu-nav {
+    display: flex;
+    gap: 0;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1000;
+}
+
+.nav-active-pill {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.08);
+    border-radius: 50px;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 1;
+    height: calc(100% - 10px);
+    top: 5px;
+    left: 5px;
+}
+
+.menu-nav a {
+    color: #666;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding: 8px 25px;
+    border-radius: 25px;
+    transition: color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+}
+
+.menu-nav a.active {
+    color: #000 !important;
+}
+
+.menu-nav a:hover {
+    color: #000;
+}
+
+.menu-nav a.active:hover {
+    color: #000 !important;
+}
+
+.btn-nav {
+    background-color: #bd9c31e3;
+    color: #fff !important;
+    padding: 8px 25px !important;
+    border-radius: 25px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 3;
+    margin-left: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-nav:hover {
+    background-color: #000;
+    transform: scale(1.05);
+}
+
+.btn-nav.btn-logout {
+    background-color: transparent;
+    border: 2px solid #d32f2f !important;
+    color: #d32f2f !important;
+}
+
+.btn-nav.btn-logout:hover {
+    background-color: #d32f2f !important;
+    color: #fff !important;
+}
+
+.navbar-text {
+    color: #666;
+    font-weight: 600;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+/* Adapta páginas com navbar */
+body:has(.navbar.fixed-top) {
+    padding-top: 0;
+}
+
+/* Media queries para navbar mobile */
+/* Media queries para navbar mobile */
+@media (max-width: 768px) {
+    .menu-nav {
+        flex-direction: column;
+        gap: 5px;
+        padding: 10px;
+    }
+
+    .menu-nav a {
+        padding: 10px 20px;
+        font-size: 0.75rem;
+    }
+
+    .btn-nav {
+        margin-left: 0;
+        margin-top: 5px;
+        width: 100%;
+    }
+
+    .navbar-toggler {
+        z-index: 1001;
+    }
+}
+
+/* ==========================================
+   DASHBOARD E ADMIN PAGE NAVBAR STYLES
+   ========================================== */
+
+/* Páginas admin e dashboard com fundo claro */
+body:has(.navbar.fixed-top) .container {
+    margin-top: 20px;
+}
+
+/* Garante que o navbar fica visível e bem espaçado */
+html {
+    scroll-padding-top: 100px;
+}
+
+/* Navbar em fundo claro/branco */
+.navbar.fixed-top {
+    background-color: transparent;
+    backdrop-filter: blur(10px);
+}
+
+/* Garante legibilidade do menu em páginas dashboard */
+body.dashboard-page .menu-nav {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+body.dashboard-page .menu-nav a {
+    color: #333;
+}
+
+body.dashboard-page .menu-nav a.active {
+    color: #000 !important;
+}
+
+body.dashboard-page .menu-nav a:hover {
+    color: #000;
+}
+
+body.dashboard-page .navbar-text {
+    color: #333;
+}
+
+/* Espaçamento especial para admin.html */
+body:has(#adminName) {
+    padding-top: 0;
+}
+
+/* Espaçamento especial para dashboard.html */
+body:has(#userName) {
+    padding-top: 0;
+}

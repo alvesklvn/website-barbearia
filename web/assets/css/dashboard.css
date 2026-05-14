@@ -8,23 +8,31 @@ body {
     min-height: 100vh;
 }
 
+#navcontent {
+    padding: 0px 12px 0px 12px;
+}
+
 .navbar {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
-    padding: 1.2rem 0;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    border-bottom: 3px solid #d4af37;
+    background-color: transparent !important;
+    padding: 2rem 0;
+    box-shadow: none !important;
 }
 
 .navbar-brand {
-    color: #d4af37 !important;
-    font-weight: 800;
-    font-size: 1.3rem;
-    letter-spacing: 1px;
+    display: none;
 }
 
 .navbar-text {
-    color: #fff !important;
+    color: #666 !important;
     font-weight: 600;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    margin-left: 15px;
+    margin-right: 0 !important;
+    padding: 8px 25px;
+    line-height: normal;
+    display: flex;
+    align-items: center;
 }
 
 .btn-outline-light {
@@ -321,3 +329,31 @@ body {
 .btn-close {
     filter: brightness(0) invert(1);
 }
+
+.dashboard-content {
+    padding-top: 140px;
+}
+
+.menu-nav {
+    min-height: auto;
+    align-items: center;
+}
+
+.menu-nav a,
+.navbar-text,
+.btn-nav {
+    height: auto;
+    box-sizing: border-box;
+}
+
+.btn-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: normal;
+}
+
+.btn-nav.btn-logout {
+    padding: 8px 25px !important;
+}
+

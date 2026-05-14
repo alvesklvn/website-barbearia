@@ -248,14 +248,14 @@ body {
 }
 
 .branded-text {
-    color: #1a1a1a;
+    color: #ffffff;
     font-size: 3rem;
     font-weight: 800;
     margin-bottom: 20px;
 }
 
 .btn-agendar-hero {
-    background-color: #1a1a1a;
+    background-color: #bd9c31d3;
     color: #fff;
     padding: 15px 40px;
     border-radius: 50px;
@@ -268,10 +268,10 @@ body {
 }
 
 .btn-agendar-hero:hover {
-    background-color: #bd9c31e3;
+    background-color: #bd9c31;
     color: #fff;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 5px 20px rgba(189, 156, 49, 0.4);
 }
 
 .menu-nav {
@@ -344,12 +344,12 @@ body {
 
 .btn-nav.btn-logout {
     background-color: transparent;
-    border: 2px solid #d32f2f;
+    border: 2px solid #d32f2f !important;
     color: #d32f2f !important;
 }
 
 .btn-nav.btn-logout:hover {
-    background-color: #d32f2f;
+    background-color: #d32f2f !important;
     color: #fff !important;
 }
 
