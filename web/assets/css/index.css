@@ -56,6 +56,19 @@ body {
     transition: opacity 0.5s ease-in-out;
 }
 
+.login-card {
+    background-color: #ffffff;
+    border-radius: 35px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    padding: 50px 40px;
+    display: none;
+    opacity: 0;
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    transition: opacity 0.5s ease-in-out;
+}
+
 .welcome-text-container {
     opacity: 1;
     transition: opacity 0.5s ease-in-out;
@@ -82,6 +95,29 @@ body {
     display: flex;
     gap: 25px;
     margin-top: 20px;
+}
+
+#btn-entrar {
+    background-color: #bd9c31d3;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+#btn-entrar:hover {
+    background-color: #d1b044;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 15px rgba(189, 156, 49, 0.336);
+    color: #fff;
+}
+
+#btn-cadastro {
+    transition: all 0.3s ease;
+}
+
+#btn-cadastro:hover {
+    background-color: rgba(0, 0, 0, 0.322);
+    transform: translateY(-2px);
+    
 }
 
 .btn-welcome-outline {

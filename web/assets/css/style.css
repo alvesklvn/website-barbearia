@@ -372,7 +372,7 @@ h6 {
 }
 
 .btn-nav.btn-logout {
-    background-color: transparent;
+    background-color: transparent !important;
     border: 2px solid #d32f2f !important;
     color: #d32f2f !important;
 }

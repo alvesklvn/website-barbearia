@@ -27,7 +27,7 @@
                     <a href="index.html" class="active">INÍCIO</a>
                     <a href="#contato">CONTATO</a>
                     <a href="dashboard.html">AGENDAR</a>
-                    <a href="login.html" class="btn-nav" id="btn-entrar">ENTRAR</a>
+                    <a onclick="showLogin()" class="btn-welcome-outline" id="btn-entrar">ENTRAR</a>
                 </div>
             </div>
         </div>
@@ -41,8 +41,8 @@
                 <h1 class="welcome-title">Seu estilo,<p></p>Nossa arte</h1>
                 <p class="welcome-subtitle">Comece a agendar seus cortes</p>
                 <div class="welcome-buttons">
-                    <button class="btn-welcome-outline" onclick="showRegister()">Cadastrar</button>
-                    <a href="login.html" class="btn-welcome-solid">Entrar</a>
+                    <button class="btn-welcome-outline" onclick="showRegister()" id="btn-cadastro">Cadastrar</button>
+                    <button class="btn-welcome-outline" onclick="showLogin()" id="btn-entrar">Entrar</button>
                 </div>
             </div>
 
@@ -66,6 +66,21 @@
                     <button type="submit" class="btn-submit w-100" style="border-radius: 50px;">CADASTRAR</button>
                 </form>
             </div>
+
+            <div class="login-card" id="login-card">
+                <button class="btn-back" onclick="showWelcome()">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <input type="email" id="login-email" name="email" placeholder="SEUEMAIL@GMAIL.COM" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" id="login-senha" name="password" placeholder="SENHA" required>
+                    </div>
+                    <button type="submit" class="btn-submit w-100" style="border-radius: 50px;">ENTRAR</button>
+                </form>
+            </div>
         </div>
 
         <!-- Seção de imagem -->
@@ -78,7 +93,7 @@
 
 
     </div>
-    
+
     <!-- Seção de Agendamento/Carrossel -->
     <section class="section-black" id="about-section">
         <div class="container-black-content">
@@ -124,7 +139,10 @@
             <!-- Lado Direito: Mapa -->
             <div class="map-side">
                 <div class="map-container">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29473.410014969257!2d-44.98358472153684!3d-22.57251038744551!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9df67fe73253c7%3A0x17d1c1765e1b1017!2sCruzeiro%2C%20SP!5e0!3m2!1spt-BR!2sbr!4v1778718291848!5m2!1spt-BR!2sbr" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29473.410014969257!2d-44.98358472153684!3d-22.57251038744551!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9df67fe73253c7%3A0x17d1c1765e1b1017!2sCruzeiro%2C%20SP!5e0!3m2!1spt-BR!2sbr!4v1778718291848!5m2!1spt-BR!2sbr"
+                        width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
         </div>
@@ -300,6 +318,29 @@
             }
         });
 
+        // Submissão do formulário de login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+
+            try {
+                const res = await fetch(`${API_BASE}/auth.php?action=login`, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    window.location.href = data.role === 'admin' ? 'admin.html' : 'dashboard.html';
+                } else {
+                    alert(data.error || 'Erro no login');
+                }
+            } catch (err) {
+                alert('Erro de conexão');
+            }
+        });
+
         // Função para mostrar o formulário de cadastro com transição
         function showRegister() {
             const welcome = document.getElementById('welcome-section');
@@ -320,18 +361,48 @@
             }, 500);
         }
 
+        function showLogin() {
+            const welcome = document.getElementById('welcome-section');
+            const login = document.getElementById('login-card');
+
+            if (!welcome || !login) return;
+
+            // Fade out do texto de boas-vindas
+            welcome.style.opacity = '0';
+
+            setTimeout(() => {
+                welcome.style.display = 'none';
+                login.style.display = 'block';
+                // Pequeno delay para garantir que o display: block foi processado antes da opacidade
+                setTimeout(() => {
+                    login.style.opacity = '1';
+                }, 50);
+            }, 500);
+        }
+
         // Função para voltar à tela de boas-vindas
         function showWelcome() {
             const welcome = document.getElementById('welcome-section');
             const register = document.getElementById('register-card');
+            const login = document.getElementById('login-card');
 
-            if (!welcome || !register) return;
+            if (!welcome) return;
 
-            // Fade out do card de cadastro
-            register.style.opacity = '0';
-            
+            if (register && register.style.display === 'block') {
+                register.style.opacity = '0';
+                setTimeout(() => {
+                    register.style.display = 'none';
+                }, 500);
+            }
+
+            if (login && login.style.display === 'block') {
+                login.style.opacity = '0';
+                setTimeout(() => {
+                    login.style.display = 'none';
+                }, 500);
+            }
+
             setTimeout(() => {
-                register.style.display = 'none';
                 welcome.style.display = 'block';
                 // Pequeno delay para garantir que o display: block foi processado antes da opacidade
                 setTimeout(() => {
