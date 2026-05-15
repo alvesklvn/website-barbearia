@@ -38,22 +38,22 @@
             <!-- Lado esquerdo: Novo Agendamento -->
             <div class="col-md-6">
                 <div class="dashboard-card">
-                    <h4 class="mb-4">Novo Agendamento</h4>
+                    <h4 class="mb-4"><i class="fas fa-calendar-plus me-2 text-warning"></i>Novo Agendamento</h4>
                     <form id="bookForm">
                         <div class="mb-3">
-                            <label class="form-label">1. Escolha o Serviço</label>
+                            <label class="form-label"><i class="fas fa-cut me-2 text-warning"></i>1. Escolha o Serviço</label>
                             <select id="serviceSelect" name="service_id" class="form-select" required>
                                 <option value="">Carregando serviços...</option>
                             </select>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">2. Escolha a Data (Terça a Sábado)</label>
+                            <label class="form-label"><i class="far fa-calendar-alt me-2 text-warning"></i>2. Escolha a Data <span class="text-muted small">(Terça a Sábado)</span></label>
                             <input type="date" id="dateInput" name="date" class="form-control" required>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">3. Escolha o Horário</label>
+                            <label class="form-label"><i class="far fa-clock me-2 text-warning"></i>3. Escolha o Horário</label>
                             <div id="timesContainer" class="d-flex flex-wrap gap-2">
                                 <p class="text-muted small">Selecione uma data para ver os horários disponíveis.</p>
                             </div>
@@ -68,7 +68,7 @@
             <!-- Lado direito: Meus Agendamentos -->
             <div class="col-md-6">
                 <div class="dashboard-card">
-                    <h4 class="mb-4">Meus Agendamentos</h4>
+                    <h4 class="mb-4"><i class="fas fa-list-ul me-2 text-warning"></i>Meus Agendamentos</h4>
                     <div id="appointmentsList" class="list-group">
                         <p class="text-muted">Carregando...</p>
                     </div>
