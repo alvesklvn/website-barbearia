@@ -3,7 +3,7 @@
  */
 
 // Base da URL para chamadas de API
-const API_BASE = '/barberia/web/api'; //barberia/api
+const API_BASE = '/barbearia/web/api'; //barberia/api
 
 /**
  * Inicializa o navbar e suas interações
@@ -106,8 +106,15 @@ async function updateNavbarAuthStatus() {
         }
         
         if (sidebarAuthItems) {
+            const firstName = auth.user.name ? auth.user.name.split(" ")[0] : "";
+            let adminLink = "";
+            if (auth.user.role === 'admin') {
+                adminLink = `<a href="admin.html" class="sidebar-link" style="font-weight: bold; color: #d4af37;">PAINEL DO BARBEIRO <i class="fas fa-chevron-right"></i></a>`;
+            }
             sidebarAuthItems.innerHTML = `
-                <a href="#" onclick="logout(); return false;" class="sidebar-link">SAIR <i class="fas fa-chevron-right"></i></a>
+                ${adminLink}
+                <div class="sidebar-greeting" style="color: rgba(255,255,255,0.8); font-size: 1.1rem; font-weight: 600; text-align: center; margin-top: 30px; margin-bottom: 15px;">Olá, ${firstName}</div>
+                <a href="#" onclick="logout(); return false;" style="display: block; text-align: center; color: #d32f2f; border: 1px solid #d32f2f; border-radius: 50px; padding: 12px 0; font-weight: 600; text-decoration: none; font-size: 1rem; background: transparent; transition: all 0.3s ease;">SAIR</a>
             `;
         }
     } else {

@@ -298,12 +298,7 @@
                 `;
 
                 // Atualizar sidebar
-                const sidebarAuthItems = document.getElementById('sidebar-auth-items');
-                if (sidebarAuthItems) {
-                    sidebarAuthItems.innerHTML = `
-                        <a href="#" onclick="logout(); return false;" class="sidebar-link">SAIR <i class="fas fa-chevron-right"></i></a>
-                    `;
-                }
+                // A atualização do sidebarAuthItems agora é feita inteiramente pelo app.js
                 initNavPill();
             } else if (auth.logged_in && auth.user.role == 'admin') {
                 // Usuário está logado (admin)
@@ -325,13 +320,7 @@
                 `;
 
                 // Atualizar sidebar
-                const sidebarAuthItems = document.getElementById('sidebar-auth-items');
-                if (sidebarAuthItems) {
-                    sidebarAuthItems.innerHTML = `
-                        <a href="admin.html" class="sidebar-link">PAINEL DO BARBEIRO <i class="fas fa-chevron-right"></i></a>
-                        <a href="#" onclick="logout(); return false;" class="sidebar-link">SAIR <i class="fas fa-chevron-right"></i></a>
-                    `;
-                }
+                // A atualização do sidebarAuthItems agora é feita inteiramente pelo app.js
                 initNavPill();
             }
         });

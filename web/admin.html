@@ -17,7 +17,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container d-flex justify-content-center" id="navcontent">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" onclick="openMobileMenu()">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
@@ -125,6 +125,23 @@
                         onclick="deleteAppointmentFromModal()">Deletar</button>
                     <button type="button" class="btn btn-primary" onclick="saveAppointmentChanges()">Salvar</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Sidebar -->
+    <div id="mobileSidebar" class="mobile-sidebar">
+        <div class="sidebar-header">
+            <button class="btn-close-sidebar" onclick="closeMobileMenu()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="sidebar-content" id="sidebar-items">
+            <a href="index.html" class="sidebar-link">INÍCIO <i class="fas fa-chevron-right"></i></a>
+            <a href="index.html#contato" class="sidebar-link">CONTATO <i class="fas fa-chevron-right"></i></a>
+            <a href="dashboard.html" class="sidebar-link">AGENDAR <i class="fas fa-chevron-right"></i></a>
+            <div id="sidebar-auth-items">
+                <!-- Preenchido pelo app.js -->
             </div>
         </div>
     </div>
