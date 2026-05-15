@@ -16,6 +16,24 @@ body {
     padding: 0px 12px 0px 12px;
 }
 
+#allAppointmentsList td {
+    color: #fff !important;
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Botão da caneta de edição */
+.edit-btn {
+    color: #bd9c31 !important;
+    transition: all 0.25s ease;
+}
+
+/* Hover */
+.edit-btn:hover {
+    color: #fff !important;
+    transform: scale(1.15);
+}
+
 .navbar {
     background-color: transparent !important;
     padding: 2rem 0;
@@ -53,7 +71,7 @@ body {
 
 .dashboard-card {
     border-radius: 30px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
     background: rgba(20, 20, 20, 0.85);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
@@ -77,18 +95,20 @@ body {
     padding-bottom: 15px;
 }
 
-.dashboard-card h5, .dashboard-card h6 {
+.dashboard-card h5,
+.dashboard-card h6 {
     color: #fff;
     font-weight: 700;
 }
 
 .dashboard-card.bg-primary {
-    background: linear-gradient(135deg, rgba(30,30,30,0.9) 0%, rgba(10,10,10,0.9) 100%) !important;
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.9) 0%, rgba(10, 10, 10, 0.9) 100%) !important;
     color: #ffffff;
     border: 1px solid rgba(189, 156, 49, 0.3);
 }
 
-#titleAppointments, #totalAppointments {
+#titleAppointments,
+#totalAppointments {
     color: #fff;
 }
 
@@ -110,7 +130,8 @@ body {
     font-size: 0.95rem;
 }
 
-.form-select, .form-control {
+.form-select,
+.form-control {
     background-color: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #fff;
@@ -120,12 +141,50 @@ body {
     transition: all 0.3s ease;
 }
 
+/* Corrige o fundo branco do campo de data */
+input[type="date"] {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+    color-scheme: dark;
+}
+
+input[type="date"]:hover {
+    border-color: rgba(189, 156, 49, 0.5) !important;
+}
+
+/* Texto da data */
+input[type="date"]::-webkit-datetime-edit {
+    color: #fff;
+}
+
+/* Ícone do calendário */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: brightness(0) saturate(100%) invert(67%) sepia(44%) saturate(592%) hue-rotate(8deg) brightness(91%) contrast(89%);
+    cursor: pointer;
+    opacity: 1;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+/* Remove fundo branco interno em alguns navegadores */
+input[type="date"]::-webkit-date-and-time-value {
+    text-align: left;
+}
+
+input[type="date"]:before {
+    color: #aaa;
+}
+
 .form-select option {
     background-color: #222;
     color: #fff;
 }
 
-.form-select:focus, .form-control:focus {
+.form-select:focus,
+.form-control:focus {
     border-color: #bd9c31;
     background-color: rgba(255, 255, 255, 0.1);
     box-shadow: 0 0 0 0.2rem rgba(189, 156, 49, 0.25);
@@ -133,7 +192,8 @@ body {
     color: #fff;
 }
 
-.form-select:hover, .form-control:hover {
+.form-select:hover,
+.form-control:hover {
     border-color: rgba(189, 156, 49, 0.5);
 }
 
@@ -163,16 +223,16 @@ body {
 }
 
 .btn-secondary {
-    background-color: rgba(255,255,255,0.1);
-    border-color: rgba(255,255,255,0.2);
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
     color: #fff;
     font-weight: 600;
     border-radius: 50px;
 }
 
 .btn-secondary:hover {
-    background-color: rgba(255,255,255,0.2);
-    border-color: rgba(255,255,255,0.3);
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
     color: #fff;
 }
 
@@ -199,7 +259,7 @@ body {
     font-weight: 600;
     background: rgba(255, 255, 255, 0.05);
     color: #fff !important;
-    border: 1px solid rgba(255,255,255,0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .time-slot:hover {
@@ -217,18 +277,18 @@ body {
 }
 
 .list-group-item {
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 15px !important;
     margin-bottom: 15px;
     padding: 16px 20px;
     transition: all 0.3s ease;
-    background: rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
     color: #fff;
 }
 
 .list-group-item:hover {
     border-color: #bd9c31;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
     transform: translateX(5px);
 }
 
@@ -243,6 +303,7 @@ body {
     background-color: transparent !important;
     color: #fff !important;
 }
+
 .table-light th {
     background-color: transparent !important;
 }
@@ -252,7 +313,7 @@ body {
 }
 
 .table tbody tr {
-    background: rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
     transition: all 0.3s ease;
     border-radius: 15px;
 }
@@ -277,8 +338,8 @@ body {
     padding: 16px;
     color: #eee;
     border: none;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .table th {
@@ -347,14 +408,15 @@ body {
 }
 
 .text-dark {
-    color: #fff !important; /* overrides text-dark inside time slots/warnings */
+    color: #fff !important;
+    /* overrides text-dark inside time slots/warnings */
 }
 
 /* ========== Modal Styles ========== */
 .modal-content {
     border-radius: 20px;
     border: 1px solid rgba(189, 156, 49, 0.3);
-    box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
     background: rgba(20, 20, 20, 0.95);
     backdrop-filter: blur(20px);
     color: #fff;
@@ -421,6 +483,7 @@ body {
     .dashboard-content {
         padding-top: 100px;
     }
+
     .dashboard-card {
         padding: 20px;
     }

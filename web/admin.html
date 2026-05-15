@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,172 +12,178 @@
     <link rel="stylesheet" href="assets/css/index.css">
     <link rel="stylesheet" href="assets/css/dashboard.css">
 </head>
+
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-    <div class="container d-flex justify-content-center" id="navcontent">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-            <div class="menu-nav" id="nav-items">
-                <div class="nav-active-pill" id="nav-pill"></div>
-                <a href="index.html">INÍCIO</a>
-                <a href="#contato">CONTATO</a>
-                <a href="admin.html">PAINEL DO BARBEIRO</a>
-                <span class="navbar-text me-3" id="adminName">Olá, Admin</span>
-                <a href="#" class="btn-nav btn-logout" id="btn-entrar" onclick="logout(); return false;">SAIR</a>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container d-flex justify-content-center" id="navcontent">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <div class="menu-nav" id="nav-items">
+                    <div class="nav-active-pill" id="nav-pill"></div>
+                    <a href="index.html">INÍCIO</a>
+                    <a href="#contato">CONTATO</a>
+                    <a href="admin.html">PAINEL DO BARBEIRO</a>
+                    <span class="navbar-text me-3" id="adminName">Olá, Admin</span>
+                    <a href="#" class="btn-nav btn-logout" id="btn-entrar" onclick="logout(); return false;">SAIR</a>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<div class="container dashboard-content">
-    <!-- Relatório Resumido -->
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <div class="dashboard-card bg-primary text-white">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <h6 id="titleAppointments">Total de Agendamentos (Mês Atual)</h6>
-                        <h2 id="totalAppointments" class="fw-bold">0</h2>
+    <div class="container dashboard-content">
+        <!-- Relatório Resumido -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="dashboard-card bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 id="titleAppointments">Total de Agendamentos (Mês Atual)</h6>
+                            <h2 id="totalAppointments" class="fw-bold">0</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="dashboard-card text-white" style="background-color: #d4af37;">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6>Faturamento (Mês Atual)</h6>
+                            <h2 id="totalRevenue" class="fw-bold">R$ 0,00</h2>
+                        </div>
+                        <button class="btn btn-sm btn-outline-light border-0 minimal-btn" title="Limpar dados"
+                            onclick="clearAllData()"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="dashboard-card text-white" style="background-color: #d4af37;">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <h6>Faturamento (Mês Atual)</h6>
-                        <h2 id="totalRevenue" class="fw-bold">R$ 0,00</h2>
+
+        <div class="row">
+            <!-- Notificações (Agendamentos Recentes) -->
+            <div class="col-md-4">
+                <div class="dashboard-card">
+                    <h5 class="mb-3 text-warning fw-bold"><i class="fas fa-bell me-2"></i>Novos Agendamentos</h5>
+                    <div id="notificationsList" class="list-group list-group-flush">
+                        <p class="text-muted small">Carregando...</p>
                     </div>
-                    <button class="btn btn-sm btn-outline-light border-0 minimal-btn" title="Limpar dados" onclick="clearAllData()"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            </div>
+
+            <!-- Todos os Agendamentos -->
+            <div class="col-md-8">
+                <div class="dashboard-card">
+                    <h5 class="mb-3 fw-bold"><i class="fas fa-calendar-check me-2 text-warning"></i>Todos os
+                        Agendamentos</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Telefone</th>
+                                    <th>Serviço</th>
+                                    <th>Data/Hora</th>
+                                    <th>Valor</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allAppointmentsList">
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">Carregando...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <!-- Notificações (Agendamentos Recentes) -->
-        <div class="col-md-4">
-            <div class="dashboard-card">
-                <h5 class="mb-3 text-warning fw-bold"><i class="fas fa-bell me-2"></i>Novos Agendamentos</h5>
-                <div id="notificationsList" class="list-group list-group-flush">
-                    <p class="text-muted small">Carregando...</p>
+    <!-- Modal para Editar Agendamento -->
+    <div id="editModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Agendamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-            </div>
-        </div>
-
-        <!-- Todos os Agendamentos -->
-        <div class="col-md-8">
-            <div class="dashboard-card">
-                <h5 class="mb-3 fw-bold"><i class="fas fa-calendar-check me-2 text-warning"></i>Todos os Agendamentos</h5>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Cliente</th>
-                                <th>Telefone</th>
-                                <th>Serviço</th>
-                                <th>Data/Hora</th>
-                                <th>Valor</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="allAppointmentsList">
-                            <tr><td colspan="7" class="text-center text-muted">Carregando...</td></tr>
-                        </tbody>
-                    </table>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editDate" class="form-label">Nova Data</label>
+                        <input type="date" id="editDate" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTime" class="form-label">Novo Horário</label>
+                        <input type="time" id="editTime" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger me-2"
+                        onclick="deleteAppointmentFromModal()">Deletar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveAppointmentChanges()">Salvar</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal para Editar Agendamento -->
-<div id="editModal" class="modal fade" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Editar Agendamento</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="editDate" class="form-label">Nova Data</label>
-                    <input type="date" id="editDate" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label for="editTime" class="form-label">Novo Horário</label>
-                    <input type="time" id="editTime" class="form-control" required>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger me-2" onclick="deleteAppointmentFromModal()">Deletar</button>
-                <button type="button" class="btn btn-primary" onclick="saveAppointmentChanges()">Salvar</button>
-            </div>
-        </div>
-    </div>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        let currentEditingAppointmentId = null;
+        let editModalInstance = null;
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/app.js"></script>
-<script>
-    let currentEditingAppointmentId = null;
-    let editModalInstance = null;
-
-    // Executa ao carregar a página
-    document.addEventListener('DOMContentLoaded', async () => {
-        // Proteção de rota: Verifica se o usuário está logado E se é admin
-        const auth = await checkAuth();
-        if (!auth.logged_in || auth.user.role !== 'admin') {
-            window.location.href = 'index.html?showLogin=true';
-            return;
-        }
-        document.getElementById('adminName').innerText = `Olá, Igor`;
-
-        // Inicializa o navbar
-        initializeNavbar();
-
-        // Inicializa o modal
-        editModalInstance = new bootstrap.Modal(document.getElementById('editModal'), {});
-
-        // Carrega os dados do painel
-        loadDashboardData();
-    });
-
-    /**
-     * Busca e renderiza todos os dados do painel administrativo.
-     */
-    async function loadDashboardData() {
-        try {
-            console.log('Carregando dados do dashboard...');
-            console.log('API_BASE:', API_BASE);
-            
-            // 1. Busca Estatísticas (Total de agendamentos e faturamento)
-            const statsRes = await fetch(`${API_BASE}/admin.php?action=monthly_stats`, { credentials: 'include' });
-            const statsData = await statsRes.json();
-            console.log('Stats response:', statsData);
-            if (statsData.stats) {
-                document.getElementById('totalAppointments').innerText = statsData.stats.total_appointments;
-                document.getElementById('totalRevenue').innerText = `R$ ${statsData.stats.total_revenue.toFixed(2).replace('.', ',')}`;
+        // Executa ao carregar a página
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Proteção de rota: Verifica se o usuário está logado E se é admin
+            const auth = await checkAuth();
+            if (!auth.logged_in || auth.user.role !== 'admin') {
+                window.location.href = 'index.html?showLogin=true';
+                return;
             }
+            document.getElementById('adminName').innerText = `Olá, Igor`;
 
-            // 2. Busca Notificações (Últimos 5 agendamentos realizados)
-            const notifRes = await fetch(`${API_BASE}/admin.php?action=notifications`, { credentials: 'include' });
-            const notifData = await notifRes.json();
-            const notifList = document.getElementById('notificationsList');
-            if (notifData.notifications && notifData.notifications.length > 0) {
-                notifList.innerHTML = '';
-                notifData.notifications.forEach(n => {
-                    const dateObj = new Date(n.appointment_date + 'T' + n.appointment_time);
-                    const dateStr = dateObj.toLocaleDateString('pt-BR');
-                    const timeStr = n.appointment_time.substring(0,5);
-                    
-                    notifList.innerHTML += `
+            // Inicializa o navbar
+            initializeNavbar();
+
+            // Inicializa o modal
+            editModalInstance = new bootstrap.Modal(document.getElementById('editModal'), {});
+
+            // Carrega os dados do painel
+            loadDashboardData();
+        });
+
+        /**
+         * Busca e renderiza todos os dados do painel administrativo.
+         */
+        async function loadDashboardData() {
+            try {
+                console.log('Carregando dados do dashboard...');
+                console.log('API_BASE:', API_BASE);
+
+                // 1. Busca Estatísticas (Total de agendamentos e faturamento)
+                const statsRes = await fetch(`${API_BASE}/admin.php?action=monthly_stats`, { credentials: 'include' });
+                const statsData = await statsRes.json();
+                console.log('Stats response:', statsData);
+                if (statsData.stats) {
+                    document.getElementById('totalAppointments').innerText = statsData.stats.total_appointments;
+                    document.getElementById('totalRevenue').innerText = `R$ ${statsData.stats.total_revenue.toFixed(2).replace('.', ',')}`;
+                }
+
+                // 2. Busca Notificações (Últimos 5 agendamentos realizados)
+                const notifRes = await fetch(`${API_BASE}/admin.php?action=notifications`, { credentials: 'include' });
+                const notifData = await notifRes.json();
+                const notifList = document.getElementById('notificationsList');
+                if (notifData.notifications && notifData.notifications.length > 0) {
+                    notifList.innerHTML = '';
+                    notifData.notifications.forEach(n => {
+                        const dateObj = new Date(n.appointment_date + 'T' + n.appointment_time);
+                        const dateStr = dateObj.toLocaleDateString('pt-BR');
+                        const timeStr = n.appointment_time.substring(0, 5);
+
+                        notifList.innerHTML += `
                         <div class="list-group-item px-0">
                             <div class="d-flex w-100 justify-content-between">
                                 <h6 class="mb-1 fw-bold">${n.client_name}</h6>
@@ -186,28 +193,28 @@
                             <small class="text-muted">Para: ${dateStr} às ${timeStr}</small>
                         </div>
                     `;
-                });
-            } else {
-                notifList.innerHTML = '<p class="text-muted small">Nenhum novo agendamento.</p>';
-            }
+                    });
+                } else {
+                    notifList.innerHTML = '<p class="text-muted small">Nenhum novo agendamento.</p>';
+                }
 
-            // 3. Busca a lista completa de todos os agendamentos (Histórico)
-            const allRes = await fetch(`${API_BASE}/admin.php?action=all_appointments`, { credentials: 'include' });
-            const allData = await allRes.json();
-            console.log('All appointments response:', allData);
-            const allList = document.getElementById('allAppointmentsList');
-            if (allData.appointments && allData.appointments.length > 0) {
-                allList.innerHTML = '';
-                allData.appointments.forEach(a => {
-                    const dateObj = new Date(a.appointment_date + 'T' + a.appointment_time);
-                    const dateStr = dateObj.toLocaleDateString('pt-BR');
-                    const timeStr = a.appointment_time.substring(0,5);
+                // 3. Busca a lista completa de todos os agendamentos (Histórico)
+                const allRes = await fetch(`${API_BASE}/admin.php?action=all_appointments`, { credentials: 'include' });
+                const allData = await allRes.json();
+                console.log('All appointments response:', allData);
+                const allList = document.getElementById('allAppointmentsList');
+                if (allData.appointments && allData.appointments.length > 0) {
+                    allList.innerHTML = '';
+                    allData.appointments.forEach(a => {
+                        const dateObj = new Date(a.appointment_date + 'T' + a.appointment_time);
+                        const dateStr = dateObj.toLocaleDateString('pt-BR');
+                        const timeStr = a.appointment_time.substring(0, 5);
 
-                    let badgeClass = 'bg-success';
-                    if (a.status === 'pendente') badgeClass = 'bg-warning text-dark';
-                    if (a.status === 'cancelado') badgeClass = 'bg-danger';
+                        let badgeClass = 'bg-success';
+                        if (a.status === 'pendente') badgeClass = 'bg-warning text-dark';
+                        if (a.status === 'cancelado') badgeClass = 'bg-danger';
 
-                    allList.innerHTML += `
+                        allList.innerHTML += `
                         <tr>
                             <td class="fw-bold">${a.client_name}</td>
                             <td>${a.client_phone}</td>
@@ -216,121 +223,127 @@
                             <td>R$ ${a.price}</td>
                             <td><span class="badge ${badgeClass}">${a.status}</span></td>
                             <td>
-                                <button class="btn btn-sm btn-link p-0 text-primary minimal-btn" title="Editar agendamento" onclick="openEditModal(${a.id}, '${a.appointment_date}', '${a.appointment_time}')" style="font-size: 1.1rem;"><i class="fas fa-pen"></i></button>
+                                <button class="btn btn-sm btn-link p-0 minimal-btn edit-btn"
+                                    title="Editar agendamento"
+                                    onclick="openEditModal(${a.id}, '${a.appointment_date}', '${a.appointment_time}')"
+                                    style="font-size: 1.1rem;">
+                                    <i class="fas fa-pen"></i>
+                                </button>
                             </td>
                         </tr>
                     `;
+                    });
+                } else {
+                    allList.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Nenhum agendamento encontrado.</td></tr>';
+                }
+            } catch (e) {
+                console.error('Erro ao carregar dashboard', e);
+            }
+        }
+
+        /**
+         * Abre o modal de edição de agendamento
+         */
+        function openEditModal(appointmentId, currentDate, currentTime) {
+            currentEditingAppointmentId = appointmentId;
+            document.getElementById('editDate').value = currentDate;
+            document.getElementById('editTime').value = currentTime;
+            editModalInstance.show();
+        }
+
+        /**
+         * Salva as alterações de data/hora do agendamento
+         */
+        async function saveAppointmentChanges() {
+            const newDate = document.getElementById('editDate').value;
+            const newTime = document.getElementById('editTime').value;
+
+            if (!newDate || !newTime) {
+                alert('Por favor, preencha data e horário.');
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('appointment_id', currentEditingAppointmentId);
+                formData.append('new_date', newDate);
+                formData.append('new_time', newTime);
+
+                const res = await fetch(`${API_BASE}/admin.php?action=update_appointment`, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
                 });
-            } else {
-                allList.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Nenhum agendamento encontrado.</td></tr>';
+
+                const data = await res.json();
+                if (data.success) {
+                    alert('Agendamento atualizado com sucesso! O cliente será notificado.');
+                    editModalInstance.hide();
+                    loadDashboardData(); // Recarrega a tabela
+                } else {
+                    alert('Erro: ' + data.error);
+                }
+            } catch (e) {
+                console.error('Erro ao atualizar agendamento', e);
+                alert('Erro ao atualizar agendamento');
             }
-        } catch (e) {
-            console.error('Erro ao carregar dashboard', e);
-        }
-    }
-
-    /**
-     * Abre o modal de edição de agendamento
-     */
-    function openEditModal(appointmentId, currentDate, currentTime) {
-        currentEditingAppointmentId = appointmentId;
-        document.getElementById('editDate').value = currentDate;
-        document.getElementById('editTime').value = currentTime;
-        editModalInstance.show();
-    }
-
-    /**
-     * Salva as alterações de data/hora do agendamento
-     */
-    async function saveAppointmentChanges() {
-        const newDate = document.getElementById('editDate').value;
-        const newTime = document.getElementById('editTime').value;
-
-        if (!newDate || !newTime) {
-            alert('Por favor, preencha data e horário.');
-            return;
         }
 
-        try {
-            const formData = new FormData();
-            formData.append('appointment_id', currentEditingAppointmentId);
-            formData.append('new_date', newDate);
-            formData.append('new_time', newTime);
-
-            const res = await fetch(`${API_BASE}/admin.php?action=update_appointment`, {
-                method: 'POST',
-                body: formData,
-                credentials: 'include'
-            });
-
-            const data = await res.json();
-            if (data.success) {
-                alert('Agendamento atualizado com sucesso! O cliente será notificado.');
-                editModalInstance.hide();
-                loadDashboardData(); // Recarrega a tabela
-            } else {
-                alert('Erro: ' + data.error);
+        /**
+         * Deleta o agendamento
+         */
+        async function deleteAppointmentFromModal() {
+            if (!confirm('Tem certeza que deseja deletar este agendamento?')) {
+                return;
             }
-        } catch (e) {
-            console.error('Erro ao atualizar agendamento', e);
-            alert('Erro ao atualizar agendamento');
-        }
-    }
 
-    /**
-     * Deleta o agendamento
-     */
-    async function deleteAppointmentFromModal() {
-        if (!confirm('Tem certeza que deseja deletar este agendamento?')) {
-            return;
-        }
+            try {
+                const formData = new FormData();
+                formData.append('appointment_id', currentEditingAppointmentId);
 
-        try {
-            const formData = new FormData();
-            formData.append('appointment_id', currentEditingAppointmentId);
+                const res = await fetch(`${API_BASE}/admin.php?action=delete_appointment`, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
 
-            const res = await fetch(`${API_BASE}/admin.php?action=delete_appointment`, {
-                method: 'POST',
-                body: formData,
-                credentials: 'include'
-            });
-
-            const data = await res.json();
-            if (data.success) {
-                alert('Agendamento deletado com sucesso!');
-                editModalInstance.hide();
-                loadDashboardData(); // Recarrega a tabela
-            } else {
-                alert('Erro: ' + data.error);
+                const data = await res.json();
+                if (data.success) {
+                    alert('Agendamento deletado com sucesso!');
+                    editModalInstance.hide();
+                    loadDashboardData(); // Recarrega a tabela
+                } else {
+                    alert('Erro: ' + data.error);
+                }
+            } catch (e) {
+                console.error('Erro ao deletar agendamento', e);
+                alert('Erro ao deletar agendamento');
             }
-        } catch (e) {
-            console.error('Erro ao deletar agendamento', e);
-            alert('Erro ao deletar agendamento');
-        }
-    }
-
-    /**
-     * Limpa todos os dados (agendamentos)
-     */
-    async function clearAllData() {
-        if (!confirm('⚠️ AVISO: Isto vai apagar TODOS os agendamentos e resetar as estatísticas!\n\nTem certeza?')) {
-            return;
         }
 
-        try {
-            const res = await fetch(`${API_BASE}/admin.php?action=clear_data`, { credentials: 'include' });
-            const data = await res.json();
-            if (data.success) {
-                alert('Dados limpados com sucesso!');
-                loadDashboardData(); // Recarrega a tabela
-            } else {
-                alert('Erro: ' + data.error);
+        /**
+         * Limpa todos os dados (agendamentos)
+         */
+        async function clearAllData() {
+            if (!confirm('⚠️ AVISO: Isto vai apagar TODOS os agendamentos e resetar as estatísticas!\n\nTem certeza?')) {
+                return;
             }
-        } catch (e) {
-            console.error('Erro ao limpar dados', e);
-            alert('Erro ao limpar dados');
+
+            try {
+                const res = await fetch(`${API_BASE}/admin.php?action=clear_data`, { credentials: 'include' });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Dados limpados com sucesso!');
+                    loadDashboardData(); // Recarrega a tabela
+                } else {
+                    alert('Erro: ' + data.error);
+                }
+            } catch (e) {
+                console.error('Erro ao limpar dados', e);
+                alert('Erro ao limpar dados');
+            }
         }
-    }
-</script>
+    </script>
 </body>
+
 </html>
