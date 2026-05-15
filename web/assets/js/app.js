@@ -3,7 +3,7 @@
  */
 
 // Base da URL para chamadas de API
-const API_BASE = '/teste1/web/api'; //barberia/api
+const API_BASE = '/barberia/web/api'; //barberia/api
 
 /**
  * Inicializa o navbar e suas interações
@@ -11,6 +11,7 @@ const API_BASE = '/teste1/web/api'; //barberia/api
 document.addEventListener('DOMContentLoaded', async () => {
     initializeNavbar();
     await updateNavbarAuthStatus();
+    setupMobileMenuListeners();
 });
 
 /**
@@ -91,29 +92,39 @@ function updatePillPosition(activeLink, pill) {
 async function updateNavbarAuthStatus() {
     const auth = await checkAuth();
     const navItems = document.getElementById('nav-items');
-    if (!navItems) return;
-
-    const btnEntrar = navItems.querySelector('.btn-nav');
-    const nameSpan = navItems.querySelector('.navbar-text');
-
+    const sidebarAuthItems = document.getElementById('sidebar-auth-items');
+    
     if (auth.logged_in) {
         // Usuário logado
-        if (btnEntrar) {
-            btnEntrar.textContent = 'SAIR';
-            btnEntrar.classList.add('btn-logout');
+        if (navItems) {
+            const btnEntrar = navItems.querySelector('#btn-entrar');
+            if (btnEntrar) {
+                btnEntrar.textContent = 'SAIR';
+                btnEntrar.classList.add('btn-logout');
+                btnEntrar.onclick = logout;
+            }
         }
-        if (nameSpan) {
-            nameSpan.textContent = `Olá, ${auth.user.name}`;
+        
+        if (sidebarAuthItems) {
+            sidebarAuthItems.innerHTML = `
+                <a href="#" onclick="logout(); return false;" class="sidebar-link">SAIR <i class="fas fa-chevron-right"></i></a>
+            `;
         }
     } else {
         // Usuário não logado
-        if (btnEntrar) {
-            btnEntrar.textContent = 'ENTRAR';
-            btnEntrar.classList.remove('btn-logout');
-            btnEntrar.onclick = null;
+        if (navItems) {
+            const btnEntrar = navItems.querySelector('#btn-entrar');
+            if (btnEntrar) {
+                btnEntrar.textContent = 'ENTRAR';
+                btnEntrar.classList.remove('btn-logout');
+                btnEntrar.onclick = () => showLogin();
+            }
         }
-        if (nameSpan) {
-            nameSpan.style.display = 'none';
+
+        if (sidebarAuthItems) {
+            sidebarAuthItems.innerHTML = `
+                <a onclick="showLogin(); closeMobileMenu()" class="sidebar-link">ENTRAR <i class="fas fa-chevron-right"></i></a>
+            `;
         }
     }
 }
@@ -151,4 +162,35 @@ async function logout() {
 function showToast(message, type = 'success') {
     // Por simplicidade, usamos o alert padrão, mas o código está pronto para expansão
     alert(message);
+}
+
+/**
+ * Funções do Menu Lateral Mobile
+ */
+function openMobileMenu() {
+    const sidebar = document.getElementById('mobileSidebar');
+    if (sidebar) {
+        sidebar.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Evita scroll ao fundo
+    }
+}
+
+function closeMobileMenu() {
+    const sidebar = document.getElementById('mobileSidebar');
+    if (sidebar) {
+        sidebar.classList.remove('active');
+        document.body.style.overflow = 'auto'; // Restaura scroll
+    }
+}
+
+function setupMobileMenuListeners() {
+    // Fecha o menu ao clicar fora dele (opcional)
+    const sidebar = document.getElementById('mobileSidebar');
+    if (sidebar) {
+        sidebar.addEventListener('click', function(e) {
+            if (e.target === sidebar) {
+                closeMobileMenu();
+            }
+        });
+    }
 }

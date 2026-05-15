@@ -436,7 +436,6 @@ html {
 /* Navbar em fundo claro/branco */
 .navbar.fixed-top {
     background-color: transparent;
-    backdrop-filter: blur(10px);
 }
 
 /* Garante legibilidade do menu em páginas dashboard */
