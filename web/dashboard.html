@@ -42,9 +42,11 @@
                     <form id="bookForm">
                         <div class="mb-3">
                             <label class="form-label"><i class="fas fa-cut me-2 text-warning"></i>1. Escolha o Serviço</label>
-                            <select id="serviceSelect" name="service_id" class="form-select" required>
-                                <option value="">Carregando serviços...</option>
-                            </select>
+                            <div class="custom-select-trigger" onclick="openServicePanel()" id="serviceTrigger">
+                                <span id="selectedServiceText">Selecione um serviço...</span>
+                                <i class="fas fa-chevron-down text-warning"></i>
+                            </div>
+                            <input type="hidden" id="serviceSelect" name="service_id">
                         </div>
 
                         <div class="mb-3">
@@ -77,9 +79,29 @@
         </div>
     </div>
 
+    <!-- Modal para Escolher Serviço -->
+    <div id="serviceModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title"><i class="fas fa-cut me-2 text-warning"></i>Serviços Disponíveis</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="servicesListPanel" class="d-flex flex-column gap-2">
+                        <p class="text-muted text-center mt-3">Carregando serviços...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/app.js"></script>
     <script>
+        let serviceModalInstance = null;
+
         // Executa ao carregar a página
         document.addEventListener('DOMContentLoaded', async () => {
             // Proteção de rota: Verifica se o usuário está logado
@@ -96,23 +118,52 @@
             dateInput.min = new Date().toISOString().split('T')[0];
 
             // Inicializa dados da página
+            serviceModalInstance = new bootstrap.Modal(document.getElementById('serviceModal'));
             loadServices();
             loadMyAppointments();
         });
 
         /**
-         * Carrega a lista de serviços disponíveis no dropdown.
+         * Carrega a lista de serviços disponíveis no painel.
          */
         async function loadServices() {
             const res = await fetch(`${API_BASE}/appointments.php?action=services`, { credentials: 'include' });
             const data = await res.json();
-            const select = document.getElementById('serviceSelect');
-            select.innerHTML = '<option value="">Selecione um serviço</option>';
-            if (data.services) {
+            const panel = document.getElementById('servicesListPanel');
+            panel.innerHTML = '';
+
+            if (data.services && data.services.length > 0) {
                 data.services.forEach(s => {
-                    select.innerHTML += `<option value="${s.id}">${s.name} - R$ ${s.price}</option>`;
+                    const card = document.createElement('div');
+                    card.className = 'service-card-item';
+                    card.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1 fw-bold text-white">${s.name}</h6>
+                                <small class="text-warning fw-bold">R$ ${s.price}</small>
+                            </div>
+                            <div class="service-icon-wrapper">
+                                <i class="fas fa-chevron-right text-warning"></i>
+                            </div>
+                        </div>
+                    `;
+                    card.onclick = () => selectService(s.id, s.name, s.price);
+                    panel.appendChild(card);
                 });
+            } else {
+                panel.innerHTML = '<p class="text-muted text-center">Nenhum serviço disponível.</p>';
             }
+        }
+
+        function openServicePanel() {
+            serviceModalInstance.show();
+        }
+
+        function selectService(id, name, price) {
+            document.getElementById('serviceSelect').value = id;
+            document.getElementById('selectedServiceText').innerHTML = `<span class="fw-bold text-white">${name}</span> <span class="text-warning ms-2">R$ ${price}</span>`;
+            document.getElementById('serviceTrigger').style.borderColor = '#bd9c31';
+            serviceModalInstance.hide();
         }
 
         /**
@@ -181,6 +232,12 @@
             e.preventDefault();
             const time = document.getElementById('timeInput').value;
             const date = document.getElementById('dateInput').value;
+            const serviceId = document.getElementById('serviceSelect').value;
+
+            if (!serviceId) {
+                alert('Por favor, escolha um serviço primeiro.');
+                return;
+            }
             if (!time) {
                 alert('Por favor, selecione um horário.');
                 return;
@@ -205,6 +262,9 @@
             if (res.ok && data.success) {
                 alert(data.message);
                 document.getElementById('bookForm').reset();
+                document.getElementById('serviceSelect').value = '';
+                document.getElementById('selectedServiceText').innerHTML = 'Selecione um serviço...';
+                document.getElementById('serviceTrigger').style.borderColor = '';
                 document.getElementById('timesContainer').innerHTML = '<p class="text-muted small">Selecione uma data para ver os horários disponíveis.</p>';
                 loadMyAppointments(); // Atualiza a lista lateral
             } else {

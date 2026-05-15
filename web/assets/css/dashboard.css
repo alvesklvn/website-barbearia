@@ -488,3 +488,57 @@ input[type="date"]:before {
         padding: 20px;
     }
 }
+
+/* ========== Custom Service Select Styles ========== */
+.custom-select-trigger {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.custom-select-trigger:hover {
+    border-color: rgba(189, 156, 49, 0.5);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.service-card-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.service-card-item:hover {
+    background: rgba(189, 156, 49, 0.1);
+    border-color: #bd9c31;
+    transform: translateY(-2px);
+}
+
+.service-icon-wrapper {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.service-card-item:hover .service-icon-wrapper {
+    background: #bd9c31;
+}
+
+.service-card-item:hover .service-icon-wrapper i {
+    color: #fff !important;
+}
