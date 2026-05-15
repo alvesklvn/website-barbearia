@@ -1,4 +1,13 @@
+#python
 venv/
-.env
 __pycache__/
 *.log
+
+#enviroment
+.env
+
+#node
+node_modules/
+
+#sessionbaileys
+auth/
