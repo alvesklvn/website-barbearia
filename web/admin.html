@@ -111,12 +111,20 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="editDate" class="form-label">Nova Data</label>
-                        <input type="date" id="editDate" class="form-control" required>
+                        <label class="form-label"><i class="far fa-calendar-alt me-2 text-warning"></i>Nova Data <span
+                                class="text-muted small">(Terça a Sábado)</span></label>
+                        <div class="custom-select-trigger" onclick="openAdminDatePanel()" id="adminDateTrigger">
+                            <span id="adminSelectedDateText">Selecione uma data...</span>
+                            <i class="far fa-calendar-check text-warning"></i>
+                        </div>
+                        <input type="hidden" id="editDate" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label for="editTime" class="form-label">Novo Horário</label>
-                        <input type="time" id="editTime" class="form-control" required>
+                        <label class="form-label"><i class="far fa-clock me-2 text-warning"></i>Novo Horário</label>
+                        <div id="adminTimesContainer" class="d-flex flex-wrap gap-2">
+                            <p class="text-muted small">Selecione uma data para ver os horários disponíveis.</p>
+                        </div>
+                        <input type="hidden" id="editTime" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -129,11 +137,49 @@
         </div>
     </div>
 
+    <!-- Modal para Escolher Data (Admin) -->
+    <div id="adminDateModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title"><i class="far fa-calendar-alt me-2 text-warning"></i>Escolha uma Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="calendar-container">
+                        <div class="calendar-header d-flex justify-content-between align-items-center mb-3">
+                            <button type="button" class="minimal-btn" onclick="changeAdminMonth(-1)"><i
+                                    class="fas fa-chevron-left"></i></button>
+                            <h6 id="adminCalendarMonthYear" class="mb-0 fw-bold text-white text-uppercase">Mês Ano</h6>
+                            <button type="button" class="minimal-btn" onclick="changeAdminMonth(1)"><i
+                                    class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <div
+                            class="calendar-weekdays d-flex justify-content-between text-warning small fw-bold mb-2 text-center">
+                            <div style="width: 14%;">Dom</div>
+                            <div style="width: 14%;">Seg</div>
+                            <div style="width: 14%;">Ter</div>
+                            <div style="width: 14%;">Qua</div>
+                            <div style="width: 14%;">Qui</div>
+                            <div style="width: 14%;">Sex</div>
+                            <div style="width: 14%;">Sáb</div>
+                        </div>
+                        <div id="adminCalendarDays" class="d-flex flex-wrap text-center gap-1">
+                            <!-- Dias serão injetados via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/app.js"></script>
     <script>
         let currentEditingAppointmentId = null;
         let editModalInstance = null;
+        let adminDateModalInstance = null;
+        let currentAdminDate = new Date();
 
         // Executa ao carregar a página
         document.addEventListener('DOMContentLoaded', async () => {
@@ -150,6 +196,7 @@
 
             // Inicializa o modal
             editModalInstance = new bootstrap.Modal(document.getElementById('editModal'), {});
+            adminDateModalInstance = new bootstrap.Modal(document.getElementById('adminDateModal'), {});
 
             // Carrega os dados do painel
             loadDashboardData();
@@ -244,11 +291,171 @@
         /**
          * Abre o modal de edição de agendamento
          */
-        function openEditModal(appointmentId, currentDate, currentTime) {
+        function openEditModal(appointmentId, currentDateStr, currentTime) {
             currentEditingAppointmentId = appointmentId;
-            document.getElementById('editDate').value = currentDate;
-            document.getElementById('editTime').value = currentTime;
+
+            const dateInput = document.getElementById('editDate');
+            dateInput.value = currentDateStr;
+
+            // Salva o tempo atual para tentar pré-selecionar após buscar disponibilidade
+            document.getElementById('editTime').dataset.initialTime = currentTime.substring(0, 5);
+
+            const [y, m, d] = currentDateStr.split('-');
+            const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            document.getElementById('adminSelectedDateText').innerHTML = `<span class="fw-bold text-white">${parseInt(d)} de ${monthNames[parseInt(m) - 1]}</span>`;
+            document.getElementById('adminDateTrigger').style.borderColor = '#bd9c31';
+
+            // Define o calendário para o mês da data do agendamento
+            currentAdminDate = new Date(y, parseInt(m) - 1, d);
+
+            // Dispara para buscar os horários
+            dateInput.dispatchEvent(new Event('change'));
+
             editModalInstance.show();
+        }
+
+        // ==================== CALENDÁRIO CUSTOMIZADO (ADMIN) ====================
+        function openAdminDatePanel() {
+            renderAdminCalendar();
+            adminDateModalInstance.show();
+        }
+
+        function changeAdminMonth(offset) {
+            currentAdminDate.setMonth(currentAdminDate.getMonth() + offset);
+            renderAdminCalendar();
+        }
+
+        function renderAdminCalendar() {
+            const monthYearText = document.getElementById('adminCalendarMonthYear');
+            const daysContainer = document.getElementById('adminCalendarDays');
+            daysContainer.innerHTML = '';
+
+            const year = currentAdminDate.getFullYear();
+            const month = currentAdminDate.getMonth();
+
+            const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            monthYearText.innerText = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const currentSelectedValue = document.getElementById('editDate').value;
+
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'calendar-day';
+                emptyDiv.style.visibility = 'hidden';
+                daysContainer.appendChild(emptyDiv);
+            }
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dateObj = new Date(year, month, i);
+                const dayOfWeek = dateObj.getDay();
+
+                // Regras da Barbearia: Não permite datas passadas nem Domingo/Segunda
+                const isPast = dateObj < today;
+                const isClosed = dayOfWeek === 0 || dayOfWeek === 1;
+
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'calendar-day';
+                dayDiv.innerText = i;
+
+                const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+
+                if (isPast || isClosed) {
+                    dayDiv.classList.add('disabled');
+                    if (isClosed && !isPast) dayDiv.title = "Fechado neste dia";
+                } else {
+                    if (dateString === currentSelectedValue) {
+                        dayDiv.classList.add('selected');
+                    }
+                    dayDiv.onclick = () => selectAdminDate(dateString, i, monthNames[month]);
+                }
+
+                daysContainer.appendChild(dayDiv);
+            }
+        }
+
+        function selectAdminDate(dateString, day, monthName) {
+            const dateInput = document.getElementById('editDate');
+            dateInput.value = dateString;
+
+            document.getElementById('adminSelectedDateText').innerHTML = `<span class="fw-bold text-white">${day} de ${monthName}</span>`;
+            document.getElementById('adminDateTrigger').style.borderColor = '#bd9c31';
+
+            // Dispara o evento change para buscar os horários
+            dateInput.dispatchEvent(new Event('change'));
+
+            adminDateModalInstance.hide();
+        }
+
+        /**
+         * Escuta mudanças na data para buscar horários disponíveis dinamicamente no admin.
+         */
+        document.getElementById('editDate').addEventListener('change', async (e) => {
+            const date = e.target.value;
+            const res = await fetch(`${API_BASE}/appointments.php?action=available_times&date=${date}`, { credentials: 'include' });
+            const data = await res.json();
+
+            const container = document.getElementById('adminTimesContainer');
+            container.innerHTML = ''; // Limpa horários anteriores
+            document.getElementById('editTime').value = ''; // Reseta seleção
+
+            if (data.error) {
+                container.innerHTML = `<p class="text-danger small">${data.error}</p>`;
+                return;
+            }
+
+            // O tempo inicial se já tinha sido setado ao abrir o modal
+            const initialTime = document.getElementById('editTime').dataset.initialTime;
+
+            // Renderiza os horários como pequenos botões (badges)
+            if (data.times && data.times.length > 0) {
+                // Adicionamos o initialTime na lista se estiver ocupado, pois estamos EDITANDO, então
+                // o horário atual do agendamento pode não vir da API se ele mesmo estiver ocupando o horário.
+                // Mas, vamos assumir que a API `available_times` apenas ignora horários ocupados.
+                // Para o Admin poder manter o horário atual, verificamos:
+                if (initialTime && !data.times.includes(initialTime)) {
+                    // Adiciona o horário que o cliente já possui para que não suma,
+                    // garantindo que ele não precise mudar de hora só por entrar na edição.
+                    // Essa é uma solução segura para mostrar o horário atual no modal de edição.
+                    data.times.push(initialTime);
+                    data.times.sort();
+                }
+
+                data.times.forEach(t => {
+                    const badge = document.createElement('span');
+                    badge.className = 'badge border text-dark time-slot p-2';
+                    badge.innerText = t;
+                    badge.onclick = () => selectAdminTime(badge, t);
+                    container.appendChild(badge);
+                });
+
+                // Tenta selecionar o initialTime
+                if (initialTime) {
+                    const matchedBadge = Array.from(container.children).find(b => b.innerText === initialTime);
+                    if (matchedBadge) {
+                        selectAdminTime(matchedBadge, initialTime);
+                    }
+                    // Limpa para não reaplicar indevidamente em outras trocas de data
+                    delete document.getElementById('editTime').dataset.initialTime;
+                }
+
+            } else {
+                container.innerHTML = '<p class="text-muted small">Nenhum horário disponível para esta data.</p>';
+            }
+        });
+
+        /**
+         * Gerencia a seleção visual do horário.
+         */
+        function selectAdminTime(element, time) {
+            document.getElementById('adminTimesContainer').querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('editTime').value = time;
         }
 
         /**
