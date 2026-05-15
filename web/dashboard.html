@@ -51,7 +51,11 @@
 
                         <div class="mb-3">
                             <label class="form-label"><i class="far fa-calendar-alt me-2 text-warning"></i>2. Escolha a Data <span class="text-muted small">(Terça a Sábado)</span></label>
-                            <input type="date" id="dateInput" name="date" class="form-control" required>
+                            <div class="custom-select-trigger" onclick="openDatePanel()" id="dateTrigger">
+                                <span id="selectedDateText">Selecione uma data...</span>
+                                <i class="far fa-calendar-check text-warning"></i>
+                            </div>
+                            <input type="hidden" id="dateInput" name="date">
                         </div>
 
                         <div class="mb-3">
@@ -97,10 +101,46 @@
     </div>
 
 
+    <!-- Modal para Escolher Data -->
+    <div id="dateModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title"><i class="far fa-calendar-alt me-2 text-warning"></i>Escolha uma Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="calendar-container">
+                        <div class="calendar-header d-flex justify-content-between align-items-center mb-3">
+                            <button type="button" class="minimal-btn" onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+                            <h6 id="calendarMonthYear" class="mb-0 fw-bold text-white text-uppercase">Mês Ano</h6>
+                            <button type="button" class="minimal-btn" onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <div class="calendar-weekdays d-flex justify-content-between text-warning small fw-bold mb-2 text-center">
+                            <div style="width: 14%;">Dom</div>
+                            <div style="width: 14%;">Seg</div>
+                            <div style="width: 14%;">Ter</div>
+                            <div style="width: 14%;">Qua</div>
+                            <div style="width: 14%;">Qui</div>
+                            <div style="width: 14%;">Sex</div>
+                            <div style="width: 14%;">Sáb</div>
+                        </div>
+                        <div id="calendarDays" class="d-flex flex-wrap text-center gap-1">
+                            <!-- Dias serão injetados via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/app.js"></script>
     <script>
         let serviceModalInstance = null;
+        let dateModalInstance = null;
+        let currentDate = new Date(); // Para navegação do calendário
 
         // Executa ao carregar a página
         document.addEventListener('DOMContentLoaded', async () => {
@@ -119,8 +159,10 @@
 
             // Inicializa dados da página
             serviceModalInstance = new bootstrap.Modal(document.getElementById('serviceModal'));
+            dateModalInstance = new bootstrap.Modal(document.getElementById('dateModal'));
             loadServices();
             loadMyAppointments();
+            renderCalendar();
         });
 
         /**
@@ -164,6 +206,84 @@
             document.getElementById('selectedServiceText').innerHTML = `<span class="fw-bold text-white">${name}</span> <span class="text-warning ms-2">R$ ${price}</span>`;
             document.getElementById('serviceTrigger').style.borderColor = '#bd9c31';
             serviceModalInstance.hide();
+        }
+
+        // ==================== CALENDÁRIO CUSTOMIZADO ====================
+        function openDatePanel() {
+            renderCalendar();
+            dateModalInstance.show();
+        }
+
+        function changeMonth(offset) {
+            currentDate.setMonth(currentDate.getMonth() + offset);
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const monthYearText = document.getElementById('calendarMonthYear');
+            const daysContainer = document.getElementById('calendarDays');
+            daysContainer.innerHTML = '';
+
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            monthYearText.innerText = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            const today = new Date();
+            today.setHours(0,0,0,0); 
+            
+            const currentSelectedValue = document.getElementById('dateInput').value;
+
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'calendar-day';
+                emptyDiv.style.visibility = 'hidden';
+                daysContainer.appendChild(emptyDiv);
+            }
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dateObj = new Date(year, month, i);
+                const dayOfWeek = dateObj.getDay();
+                
+                // Regras da Barbearia: Não permite datas passadas nem Domingo/Segunda
+                const isPast = dateObj < today;
+                const isClosed = dayOfWeek === 0 || dayOfWeek === 1;
+
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'calendar-day';
+                dayDiv.innerText = i;
+
+                const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+
+                if (isPast || isClosed) {
+                    dayDiv.classList.add('disabled');
+                    if (isClosed && !isPast) dayDiv.title = "Fechado neste dia";
+                } else {
+                    if (dateString === currentSelectedValue) {
+                        dayDiv.classList.add('selected');
+                    }
+                    dayDiv.onclick = () => selectDate(dateString, i, monthNames[month]);
+                }
+
+                daysContainer.appendChild(dayDiv);
+            }
+        }
+
+        function selectDate(dateString, day, monthName) {
+            const dateInput = document.getElementById('dateInput');
+            dateInput.value = dateString;
+            
+            document.getElementById('selectedDateText').innerHTML = `<span class="fw-bold text-white">${day} de ${monthName}</span>`;
+            document.getElementById('dateTrigger').style.borderColor = '#bd9c31';
+            
+            // Dispara o evento change para buscar os horários
+            dateInput.dispatchEvent(new Event('change'));
+            
+            dateModalInstance.hide();
         }
 
         /**
@@ -238,6 +358,10 @@
                 alert('Por favor, escolha um serviço primeiro.');
                 return;
             }
+            if (!date) {
+                alert('Por favor, selecione uma data.');
+                return;
+            }
             if (!time) {
                 alert('Por favor, selecione um horário.');
                 return;
@@ -265,6 +389,9 @@
                 document.getElementById('serviceSelect').value = '';
                 document.getElementById('selectedServiceText').innerHTML = 'Selecione um serviço...';
                 document.getElementById('serviceTrigger').style.borderColor = '';
+                document.getElementById('dateInput').value = '';
+                document.getElementById('selectedDateText').innerHTML = 'Selecione uma data...';
+                document.getElementById('dateTrigger').style.borderColor = '';
                 document.getElementById('timesContainer').innerHTML = '<p class="text-muted small">Selecione uma data para ver os horários disponíveis.</p>';
                 loadMyAppointments(); // Atualiza a lista lateral
             } else {
