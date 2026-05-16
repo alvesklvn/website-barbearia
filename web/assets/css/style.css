@@ -526,3 +526,111 @@ body:has(#userName) {
         font-size: 1rem;
     }
 }
+
+/* ==========================================
+   TOAST NOTIFICATIONS (Substituto do Alert)
+   ========================================== */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10500;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    pointer-events: none;
+}
+
+.custom-toast {
+    background: #fff;
+    color: #333;
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 300px;
+    max-width: 400px;
+    transform: translateX(120%);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    pointer-events: auto;
+    border-left: 5px solid #d4af37; /* Default gold */
+}
+
+.custom-toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.toast-icon {
+    font-size: 1.5rem;
+}
+
+.toast-message {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 0;
+    margin-left: 15px;
+}
+
+.toast-close:hover {
+    color: #333;
+}
+
+/* Tipos de Toast */
+.custom-toast.toast-success {
+    border-left-color: #28a745;
+}
+.custom-toast.toast-success .toast-icon {
+    color: #28a745;
+}
+
+.custom-toast.toast-danger {
+    border-left-color: #dc3545;
+}
+.custom-toast.toast-danger .toast-icon {
+    color: #dc3545;
+}
+
+.custom-toast.toast-warning {
+    border-left-color: #d4af37; /* Gold/Warning */
+}
+.custom-toast.toast-warning .toast-icon {
+    color: #d4af37;
+}
+
+@media (max-width: 576px) {
+    #toast-container {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        align-items: center;
+    }
+    
+    .custom-toast {
+        min-width: 100%;
+        transform: translateY(-100%);
+    }
+    
+    .custom-toast.show {
+        transform: translateY(0);
+    }
+}

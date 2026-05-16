@@ -168,9 +168,57 @@ async function logout() {
  * @param {string} type Tipo do alerta (success ou danger)
  */
 function showToast(message, type = 'success') {
-    // Por simplicidade, usamos o alert padrão, mas o código está pronto para expansão
-    alert(message);
+    let toastContainer = document.getElementById('toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'toast-container';
+        document.body.appendChild(toastContainer);
+    }
+
+    const toast = document.createElement('div');
+    
+    // Inferir tipo pela mensagem se vier como genérico (ex: do window.alert)
+    if (message.toLowerCase().includes('erro') || message.toLowerCase().includes('inválido') || message.toLowerCase().includes('por favor') || message.toLowerCase().includes('falha')) {
+        type = 'danger';
+    } else if (message.toLowerCase().includes('sucesso') || message.toLowerCase().includes('realizado')) {
+        type = 'success';
+    } else if (type !== 'success' && type !== 'danger') {
+        type = 'warning';
+    }
+
+    toast.className = `custom-toast toast-${type}`;
+    
+    let iconClass = 'fas fa-info-circle';
+    if (type === 'success') iconClass = 'fas fa-check-circle';
+    else if (type === 'danger' || type === 'error') iconClass = 'fas fa-exclamation-circle';
+    else if (type === 'warning') iconClass = 'fas fa-exclamation-triangle';
+
+    toast.innerHTML = `
+        <div class="toast-content">
+            <i class="${iconClass} toast-icon"></i>
+            <span class="toast-message">${message}</span>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.classList.remove('show'); setTimeout(() => this.parentElement.remove(), 300)"><i class="fas fa-times"></i></button>
+    `;
+
+    toastContainer.appendChild(toast);
+
+    // Animacao de entrada
+    setTimeout(() => toast.classList.add('show'), 10);
+
+    // Remover automaticamente
+    setTimeout(() => {
+        if (toast.parentElement) {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }
+    }, 4500);
 }
+
+// Substitui o alert nativo pelo novo toast
+window.alert = function(msg) {
+    showToast(msg, 'warning');
+};
 
 /**
  * Funções do Menu Lateral Mobile
