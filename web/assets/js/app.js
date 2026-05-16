@@ -11,6 +11,8 @@ const API_BASE = '/teste1/web/api'; //barberia/api
 document.addEventListener('DOMContentLoaded', async () => {
     initializeNavbar();
     await updateNavbarAuthStatus();
+    setupMobileMenuListeners();
+    setupBackToTopButton();
 });
 
 /**
@@ -22,7 +24,7 @@ function initializeNavbar() {
 
     const links = navItems.querySelectorAll('a:not(.btn-nav)');
     const pill = document.getElementById('nav-pill');
-    
+
     if (!pill) return;
 
     // Define qual link é ativo baseado na página atual
@@ -30,7 +32,7 @@ function initializeNavbar() {
 
     // Atualiza a posição do pill ao clicar
     links.forEach(link => {
-        link.addEventListener('click', function() {
+        link.addEventListener('click', function () {
             links.forEach(l => l.classList.remove('active'));
             this.classList.add('active');
             updatePillPosition(this, pill);
@@ -56,11 +58,11 @@ function initializeNavbar() {
  */
 function setActiveNavLink(links) {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    
+
     links.forEach(link => {
         link.classList.remove('active');
         const href = link.getAttribute('href');
-        
+
         if (href === currentPage || (href === '#contato' && currentPage === 'index.html' && !document.querySelector('.active'))) {
             if (href === currentPage) {
                 link.classList.add('active');
@@ -80,7 +82,7 @@ function setActiveNavLink(links) {
 function updatePillPosition(activeLink, pill) {
     const left = activeLink.offsetLeft - 5;
     const width = activeLink.offsetWidth + 10;
-    
+
     pill.style.left = left + 'px';
     pill.style.width = width + 'px';
 }
@@ -91,29 +93,46 @@ function updatePillPosition(activeLink, pill) {
 async function updateNavbarAuthStatus() {
     const auth = await checkAuth();
     const navItems = document.getElementById('nav-items');
-    if (!navItems) return;
-
-    const btnEntrar = navItems.querySelector('.btn-nav');
-    const nameSpan = navItems.querySelector('.navbar-text');
+    const sidebarAuthItems = document.getElementById('sidebar-auth-items');
 
     if (auth.logged_in) {
         // Usuário logado
-        if (btnEntrar) {
-            btnEntrar.textContent = 'SAIR';
-            btnEntrar.classList.add('btn-logout');
+        if (navItems) {
+            const btnEntrar = navItems.querySelector('#btn-entrar');
+            if (btnEntrar) {
+                btnEntrar.textContent = 'SAIR';
+                btnEntrar.classList.add('btn-logout');
+                btnEntrar.onclick = logout;
+            }
         }
-        if (nameSpan) {
-            nameSpan.textContent = `Olá, ${auth.user.name}`;
+
+        if (sidebarAuthItems) {
+            const firstName = auth.user.name ? auth.user.name.split(" ")[0] : "";
+            let adminLink = "";
+            if (auth.user.role === 'admin') {
+                adminLink = `<a href="admin.html" class="sidebar-link" style="font-weight: bold; color: #d4af37;">PAINEL DO BARBEIRO <i class="fas fa-chevron-right"></i></a>`;
+            }
+            sidebarAuthItems.innerHTML = `
+                ${adminLink}
+                <div class="sidebar-greeting" style="color: rgba(255,255,255,0.8); font-size: 1.1rem; font-weight: 600; text-align: center; margin-top: 30px; margin-bottom: 15px;">Olá, ${firstName}</div>
+                <a href="#" onclick="logout(); return false;" style="display: block; text-align: center; color: #d32f2f; border: 1px solid #d32f2f; border-radius: 50px; padding: 12px 0; font-weight: 600; text-decoration: none; font-size: 1rem; background: transparent; transition: all 0.3s ease;">SAIR</a>
+            `;
         }
     } else {
         // Usuário não logado
-        if (btnEntrar) {
-            btnEntrar.textContent = 'ENTRAR';
-            btnEntrar.classList.remove('btn-logout');
-            btnEntrar.onclick = null;
+        if (navItems) {
+            const btnEntrar = navItems.querySelector('#btn-entrar');
+            if (btnEntrar) {
+                btnEntrar.textContent = 'ENTRAR';
+                btnEntrar.classList.remove('btn-logout');
+                btnEntrar.onclick = () => showLogin();
+            }
         }
-        if (nameSpan) {
-            nameSpan.style.display = 'none';
+
+        if (sidebarAuthItems) {
+            sidebarAuthItems.innerHTML = `
+                <a onclick="showLogin(); closeMobileMenu()" class="sidebar-link">ENTRAR <i class="fas fa-chevron-right"></i></a>
+            `;
         }
     }
 }
@@ -151,4 +170,60 @@ async function logout() {
 function showToast(message, type = 'success') {
     // Por simplicidade, usamos o alert padrão, mas o código está pronto para expansão
     alert(message);
+}
+
+/**
+ * Funções do Menu Lateral Mobile
+ */
+function openMobileMenu() {
+    const sidebar = document.getElementById('mobileSidebar');
+    if (sidebar) {
+        sidebar.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Evita scroll ao fundo
+    }
+}
+
+function closeMobileMenu() {
+    const sidebar = document.getElementById('mobileSidebar');
+    if (sidebar) {
+        sidebar.classList.remove('active');
+        document.body.style.overflow = 'auto'; // Restaura scroll
+    }
+}
+
+function setupMobileMenuListeners() {
+    // Fecha o menu ao clicar fora dele (opcional)
+    const sidebar = document.getElementById('mobileSidebar');
+    if (sidebar) {
+        sidebar.addEventListener('click', function (e) {
+            if (e.target === sidebar) {
+                closeMobileMenu();
+            }
+        });
+    }
+}
+
+/**
+ * Adiciona um botão de "voltar ao topo" elegante
+ */
+function setupBackToTopButton() {
+    const btn = document.createElement('button');
+    btn.id = 'btn-back-to-top';
+    btn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+    document.body.appendChild(btn);
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            btn.classList.add('show');
+        } else {
+            btn.classList.remove('show');
+        }
+    });
+
+    btn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
 }

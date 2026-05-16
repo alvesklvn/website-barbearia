@@ -389,6 +389,15 @@ h6 {
     white-space: nowrap;
 }
 
+/* Garante que o texto de saudação na navbar (apenas desktop) tenha a mesma cor e estilo dos botões */
+.navbar-dark .menu-nav .navbar-text {
+    color: #666 !important;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
 /* Adapta páginas com navbar */
 body:has(.navbar.fixed-top) {
     padding-top: 0;
@@ -436,7 +445,6 @@ html {
 /* Navbar em fundo claro/branco */
 .navbar.fixed-top {
     background-color: transparent;
-    backdrop-filter: blur(10px);
 }
 
 /* Garante legibilidade do menu em páginas dashboard */
@@ -468,4 +476,53 @@ body:has(#adminName) {
 /* Espaçamento especial para dashboard.html */
 body:has(#userName) {
     padding-top: 0;
+}
+
+/* ==========================================
+   BACK TO TOP BUTTON
+   ========================================== */
+#btn-back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #d4af37 0%, #b8921c 100%);
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 9999;
+}
+
+#btn-back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+#btn-back-to-top:hover {
+    background: #000;
+    color: #d4af37;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+    #btn-back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
 }

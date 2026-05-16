@@ -17,14 +17,14 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container d-flex justify-content-center" id="navcontent">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" onclick="openMobileMenu()">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <div class="menu-nav" id="nav-items">
                     <div class="nav-active-pill" id="nav-pill"></div>
                     <a href="index.html">INÍCIO</a>
-                    <a href="#contato">CONTATO</a>
+                    <a href="index.html#contact-section">CONTATO</a>
                     <a href="admin.html">PAINEL DO BARBEIRO</a>
                     <span class="navbar-text me-3" id="adminName">Olá, Admin</span>
                     <a href="#" class="btn-nav btn-logout" id="btn-entrar" onclick="logout(); return false;">SAIR</a>
@@ -137,6 +137,23 @@
         </div>
     </div>
 
+    <!-- Mobile Sidebar -->
+    <div id="mobileSidebar" class="mobile-sidebar">
+        <div class="sidebar-header">
+            <button class="btn-close-sidebar" onclick="closeMobileMenu()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="sidebar-content" id="sidebar-items">
+            <a href="index.html" class="sidebar-link">INÍCIO <i class="fas fa-chevron-right"></i></a>
+            <a href="index.html#contact-section" class="sidebar-link">CONTATO <i class="fas fa-chevron-right"></i></a>
+            <a href="dashboard.html" class="sidebar-link">AGENDAR <i class="fas fa-chevron-right"></i></a>
+            <div id="sidebar-auth-items">
+                <!-- Preenchido pelo app.js -->
+            </div>
+        </div>
+    </div>
+
     <!-- Modal para Escolher Data (Admin) -->
     <div id="adminDateModal" class="modal fade" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -189,7 +206,7 @@
                 window.location.href = 'index.html?showLogin=true';
                 return;
             }
-            document.getElementById('adminName').innerText = `Olá, Igor`;
+            document.getElementById('adminName').innerText = `Olá, Admin`;
 
             // Inicializa o navbar
             initializeNavbar();
