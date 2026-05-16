@@ -24,7 +24,7 @@
                 <div class="menu-nav" id="nav-items">
                     <div class="nav-active-pill" id="nav-pill"></div>
                     <a href="index.html">INÍCIO</a>
-                    <a href="#contato">CONTATO</a>
+                    <a href="index.html#contact-section">CONTATO</a>
                     <a href="admin.html">PAINEL DO BARBEIRO</a>
                     <span class="navbar-text me-3" id="adminName">Olá, Admin</span>
                     <a href="#" class="btn-nav btn-logout" id="btn-entrar" onclick="logout(); return false;">SAIR</a>
@@ -138,7 +138,7 @@
         </div>
         <div class="sidebar-content" id="sidebar-items">
             <a href="index.html" class="sidebar-link">INÍCIO <i class="fas fa-chevron-right"></i></a>
-            <a href="index.html#contato" class="sidebar-link">CONTATO <i class="fas fa-chevron-right"></i></a>
+            <a href="index.html#contact-section" class="sidebar-link">CONTATO <i class="fas fa-chevron-right"></i></a>
             <a href="dashboard.html" class="sidebar-link">AGENDAR <i class="fas fa-chevron-right"></i></a>
             <div id="sidebar-auth-items">
                 <!-- Preenchido pelo app.js -->
@@ -160,7 +160,7 @@
                 window.location.href = 'index.html?showLogin=true';
                 return;
             }
-            document.getElementById('adminName').innerText = `Olá, Igor`;
+            document.getElementById('adminName').innerText = `Olá, Admin`;
 
             // Inicializa o navbar
             initializeNavbar();

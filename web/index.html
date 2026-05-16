@@ -25,7 +25,7 @@
                 <div class="menu-nav" id="nav-items">
                     <div class="nav-active-pill" id="nav-pill"></div>
                     <a href="index.html" class="active">INÍCIO</a>
-                    <a href="#contato">CONTATO</a>
+                    <a href="#contact-section">CONTATO</a>
                     <a href="dashboard.html">AGENDAR</a>
                     <a onclick="showLogin()" class="btn-welcome-outline" id="btn-entrar">ENTRAR</a>
                 </div>
@@ -133,6 +133,7 @@
                     <p><i class="fas fa-map-marker-alt"></i> Cruzeiro, SP</p>
                     <p><i class="fas fa-phone"></i> (12) 00000-0000</p>
                     <p><i class="fas fa-clock"></i> Seg - Sáb: 09h às 20h</p>
+                    <p><i class="fab fa-instagram"></i> @barbearia</p>
                 </div>
             </div>
 
@@ -292,7 +293,7 @@
                 navItems.innerHTML = `
                     <div class="nav-active-pill" id="nav-pill"></div>
                     <a href="index.html" class="active">INÍCIO</a>
-                    <a href="#contato">CONTATO</a>
+                    <a href="#contact-section">CONTATO</a>
                     <a href="dashboard.html">AGENDAR</a>
                     <a href="#" onclick="logout(); return false;" class="btn-nav btn-logout">SAIR</a>
                 `;
@@ -314,7 +315,7 @@
                 navItems.innerHTML = `
                     <div class="nav-active-pill" id="nav-pill"></div>
                     <a href="index.html" class="active">INÍCIO</a>
-                    <a href="#contato">CONTATO</a>
+                    <a href="#contact-section">CONTATO</a>
                     <a href="admin.html">PAINEL DO BARBEIRO</a>
                     <a href="#" onclick="logout(); return false;" class="btn-nav btn-logout">SAIR</a>
                 `;
@@ -375,39 +376,63 @@
         function showRegister() {
             const welcome = document.getElementById('welcome-section');
             const register = document.getElementById('register-card');
+            const login = document.getElementById('login-card');
 
             if (!welcome || !register) return;
 
-            // Fade out do texto de boas-vindas
-            welcome.style.opacity = '0';
+            if (register.style.display === 'block') return;
+
+            let delay = 0;
+
+            if (welcome.style.display !== 'none') {
+                welcome.style.opacity = '0';
+                delay = 500;
+                setTimeout(() => { welcome.style.display = 'none'; }, 500);
+            }
+
+            if (login && login.style.display === 'block') {
+                login.style.opacity = '0';
+                delay = 500;
+                setTimeout(() => { login.style.display = 'none'; }, 500);
+            }
 
             setTimeout(() => {
-                welcome.style.display = 'none';
                 register.style.display = 'block';
-                // Pequeno delay para garantir que o display: block foi processado antes da opacidade
                 setTimeout(() => {
                     register.style.opacity = '1';
                 }, 50);
-            }, 500);
+            }, delay);
         }
 
         function showLogin() {
             const welcome = document.getElementById('welcome-section');
             const login = document.getElementById('login-card');
+            const register = document.getElementById('register-card');
 
             if (!welcome || !login) return;
 
-            // Fade out do texto de boas-vindas
-            welcome.style.opacity = '0';
+            if (login.style.display === 'block') return;
+
+            let delay = 0;
+
+            if (welcome.style.display !== 'none') {
+                welcome.style.opacity = '0';
+                delay = 500;
+                setTimeout(() => { welcome.style.display = 'none'; }, 500);
+            }
+
+            if (register && register.style.display === 'block') {
+                register.style.opacity = '0';
+                delay = 500;
+                setTimeout(() => { register.style.display = 'none'; }, 500);
+            }
 
             setTimeout(() => {
-                welcome.style.display = 'none';
                 login.style.display = 'block';
-                // Pequeno delay para garantir que o display: block foi processado antes da opacidade
                 setTimeout(() => {
                     login.style.opacity = '1';
                 }, 50);
-            }, 500);
+            }, delay);
         }
 
         // Função para voltar à tela de boas-vindas

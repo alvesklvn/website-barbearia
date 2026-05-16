@@ -3,7 +3,7 @@
  */
 
 // Base da URL para chamadas de API
-const API_BASE = '/barbearia/web/api'; //barberia/api
+const API_BASE = '/teste1/web/api'; //barberia/api
 
 /**
  * Inicializa o navbar e suas interações
@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeNavbar();
     await updateNavbarAuthStatus();
     setupMobileMenuListeners();
+    setupBackToTopButton();
 });
 
 /**
@@ -23,7 +24,7 @@ function initializeNavbar() {
 
     const links = navItems.querySelectorAll('a:not(.btn-nav)');
     const pill = document.getElementById('nav-pill');
-    
+
     if (!pill) return;
 
     // Define qual link é ativo baseado na página atual
@@ -31,7 +32,7 @@ function initializeNavbar() {
 
     // Atualiza a posição do pill ao clicar
     links.forEach(link => {
-        link.addEventListener('click', function() {
+        link.addEventListener('click', function () {
             links.forEach(l => l.classList.remove('active'));
             this.classList.add('active');
             updatePillPosition(this, pill);
@@ -57,11 +58,11 @@ function initializeNavbar() {
  */
 function setActiveNavLink(links) {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    
+
     links.forEach(link => {
         link.classList.remove('active');
         const href = link.getAttribute('href');
-        
+
         if (href === currentPage || (href === '#contato' && currentPage === 'index.html' && !document.querySelector('.active'))) {
             if (href === currentPage) {
                 link.classList.add('active');
@@ -81,7 +82,7 @@ function setActiveNavLink(links) {
 function updatePillPosition(activeLink, pill) {
     const left = activeLink.offsetLeft - 5;
     const width = activeLink.offsetWidth + 10;
-    
+
     pill.style.left = left + 'px';
     pill.style.width = width + 'px';
 }
@@ -93,7 +94,7 @@ async function updateNavbarAuthStatus() {
     const auth = await checkAuth();
     const navItems = document.getElementById('nav-items');
     const sidebarAuthItems = document.getElementById('sidebar-auth-items');
-    
+
     if (auth.logged_in) {
         // Usuário logado
         if (navItems) {
@@ -104,7 +105,7 @@ async function updateNavbarAuthStatus() {
                 btnEntrar.onclick = logout;
             }
         }
-        
+
         if (sidebarAuthItems) {
             const firstName = auth.user.name ? auth.user.name.split(" ")[0] : "";
             let adminLink = "";
@@ -194,10 +195,35 @@ function setupMobileMenuListeners() {
     // Fecha o menu ao clicar fora dele (opcional)
     const sidebar = document.getElementById('mobileSidebar');
     if (sidebar) {
-        sidebar.addEventListener('click', function(e) {
+        sidebar.addEventListener('click', function (e) {
             if (e.target === sidebar) {
                 closeMobileMenu();
             }
         });
     }
+}
+
+/**
+ * Adiciona um botão de "voltar ao topo" elegante
+ */
+function setupBackToTopButton() {
+    const btn = document.createElement('button');
+    btn.id = 'btn-back-to-top';
+    btn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+    document.body.appendChild(btn);
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            btn.classList.add('show');
+        } else {
+            btn.classList.remove('show');
+        }
+    });
+
+    btn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
 }
